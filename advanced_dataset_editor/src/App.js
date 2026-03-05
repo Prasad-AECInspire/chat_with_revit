@@ -30,8 +30,7 @@ const App = () => {
   const [scale, setScale] = useState(1);
   const [stagePos, setStagePos] = useState({ x: 0, y: 0 });
   const [newAnnotation, setNewAnnotation] = useState(null); // For interactive drawing
-  const [batchStartIndex, setBatchStartIndex] = useState(0); // For batch navigation
-  const [batchSize] = useState(50); // Show 50 images per batch
+  const [imageClassFilter, setImageClassFilter] = useState(null); // For class-wise filtering (null = all images)
   const [editingAnnotation, setEditingAnnotation] = useState(null); // For annotation editing
   const [hoveredAnnotation, setHoveredAnnotation] = useState(null); // For hover tooltip
   const [crosshairPos, setCrosshairPos] = useState({ x: 0, y: 0 });
@@ -49,8 +48,8 @@ const App = () => {
   const [modifiedPatches, setModifiedPatches] = useState({}); // { [split]: { [imageName]: [patches...] } }
 
   // State for dataset split selection
-  const [datasetSplit, setDatasetSplit] = useState('train'); // train, valid, test
-  const [availableSplits, setAvailableSplits] = useState(['train', 'valid', 'test']); // Always include all splits by default
+  const [datasetSplit, setDatasetSplit] = useState('all'); // all, train, valid, test
+  const [availableSplits, setAvailableSplits] = useState(['all', 'train', 'valid', 'test']); // Always include all splits by default
 
   // State for new class input
   const [newClassName, setNewClassName] = useState('');
@@ -60,8 +59,7 @@ const App = () => {
   const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
   const [dragStartAnnotation, setDragStartAnnotation] = useState(null);
 
-  const [isClassWiseBatch, setIsClassWiseBatch] = useState(false);
-  const [classWiseBatchClass, setClassWiseBatchClass] = useState(null);
+
 
 
 
@@ -93,11 +91,7 @@ const App = () => {
 
   const [deletedImages, setDeletedImages] = useState([]); // Array of strings e.g. "train/image1.jpg"
 
-  // Auto-Save / Sync States
-  const [autoSyncDirectory, setAutoSyncDirectory] = useState("");
-  const [isAutoSyncEnabled, setIsAutoSyncEnabled] = useState(false);
-  const [lastSyncTime, setLastSyncTime] = useState(null);
-  const [isSyncing, setIsSyncing] = useState(false);
+
 
   const [customFilename, setCustomFilename] = useState(''); // State for custom download filename
 
@@ -218,20 +212,12 @@ const App = () => {
     );
   };
 
-  // Calculate current batch with class filtering
-  const displayImages = isClassWiseBatch && classWiseBatchClass !== null
-    ? getImagesWithClass(classWiseBatchClass)
+  // Calculate displayed images with class filtering
+  const displayImages = imageClassFilter !== null
+    ? getImagesWithClass(imageClassFilter)
     : images;
 
-  const currentBatch = displayImages.slice(batchStartIndex, batchStartIndex + batchSize);
-  const totalBatches = Math.ceil(displayImages.length / batchSize);
-  const currentBatchIndex = Math.floor(batchStartIndex / batchSize) + 1;
 
-
-  // const displayImages = getDisplayImages();
-  // const currentBatch = displayImages.slice(batchStartIndex, batchStartIndex + batchSize);
-  // const totalBatches = Math.ceil(displayImages.length / batchSize);
-  // const currentBatchIndex = Math.floor(batchStartIndex / batchSize) + 1;
 
   // Handle file upload
   const onDrop = async (acceptedFiles) => {
@@ -434,160 +420,134 @@ const App = () => {
   // Load dataset for a specific split
   const loadDatasetForSplit = async (content, config, split, currentModifiedImages = modifiedImages, currentModifiedPatches = modifiedPatches) => {
     try {
-      // Extract images and annotations based on selected split
       const extractedImages = [];
+      const splitsToProcess = split === 'all' ? ['train', 'valid', 'test'] : [split];
 
-      // Determine folder paths based on selected split
-      let imageFolder, labelFolder;
-      console.log(`Loading dataset for split: ${split}`);
-      console.log(`Config:`, config);
+      let totalImageCounter = 0;
 
-      if (split === 'train') {
-        // For train, we need to handle the path correctly
-        const trainImagePath = config?.train || "train/images";
-        const trainBasePath = trainImagePath.replace('/images', '');
-        console.log(`Train image path: ${trainImagePath}, base path: ${trainBasePath}`);
-        imageFolder = content.folder(trainBasePath) || content.folder("train") || content.folder("images");
-        labelFolder = content.folder(trainBasePath ? `${trainBasePath}/labels` : "train/labels") || content.folder("train/labels") || content.folder("labels");
-      } else if (split === 'valid') {
-        // For valid, we need to handle the path correctly and check both 'val' and 'valid'
-        const valImagePath = config?.val || "valid/images";
-        const valBasePath = valImagePath.replace('/images', '');
-        console.log(`Valid image path: ${valImagePath}, base path: ${valBasePath}`);
-        // Try both 'valid' and 'val' folder names
-        imageFolder = content.folder(valBasePath) || content.folder("valid") || content.folder("val") || content.folder("images");
-        labelFolder = content.folder(valBasePath ? `${valBasePath}/labels` : "valid/labels") ||
-          content.folder("valid/labels") ||
-          content.folder("val/labels") ||
-          content.folder("labels");
-      } else if (split === 'test') {
-        // For test, we need to handle the path correctly
-        const testImagePath = config?.test || "test/images";
-        const testBasePath = testImagePath.replace('/images', '');
-        console.log(`Test image path: ${testImagePath}, base path: ${testBasePath}`);
-        imageFolder = content.folder(testBasePath) || content.folder("test") || content.folder("images");
-        labelFolder = content.folder(testBasePath ? `${testBasePath}/labels` : "test/labels") || content.folder("test/labels") || content.folder("labels");
-      } else {
-        // Default to train if split not found
-        imageFolder = content.folder("train") || content.folder("images");
-        labelFolder = content.folder("train/labels") || content.folder("labels");
-      }
+      for (const currentSplit of splitsToProcess) {
+        // Determine folder paths based on currentSplit
+        let imageFolder, labelFolder;
+        console.log(`Loading dataset segment: ${currentSplit}`);
 
-      console.log("Initial imageFolder found:", imageFolder !== null);
-      console.log("Initial labelFolder found:", labelFolder !== null);
+        if (currentSplit === 'train') {
+          const trainImagePath = config?.train || "train/images";
+          const trainBasePath = trainImagePath.replace('/images', '');
+          imageFolder = content.folder(trainBasePath) || content.folder("train") || content.folder("images");
+          labelFolder = content.folder(trainBasePath ? `${trainBasePath}/labels` : "train/labels") || content.folder("train/labels") || content.folder("labels");
+        } else if (currentSplit === 'valid') {
+          const valImagePath = config?.val || "valid/images";
+          const valBasePath = valImagePath.replace('/images', '');
+          imageFolder = content.folder(valBasePath) || content.folder("valid") || content.folder("val") || content.folder("images");
+          labelFolder = content.folder(valBasePath ? `${valBasePath}/labels` : "valid/labels") ||
+            content.folder("valid/labels") ||
+            content.folder("val/labels") ||
+            content.folder("labels");
+        } else if (currentSplit === 'test') {
+          const testImagePath = config?.test || "test/images";
+          const testBasePath = testImagePath.replace('/images', '');
+          imageFolder = content.folder(testBasePath) || content.folder("test") || content.folder("images");
+          labelFolder = content.folder(testBasePath ? `${testBasePath}/labels` : "test/labels") || content.folder("test/labels") || content.folder("labels");
+        }
 
-      // If we couldn't find the specific folder, try to find any image folder
-      if (!imageFolder) {
-        console.log("No standard image folder found, searching for any image folder...");
-        // Try to find any folder with images
-        const folders = Object.keys(content.files).filter(key => key.includes('/') && !key.includes('.')).map(key => key.split('/')[0]);
-        const uniqueFolders = [...new Set(folders)];
-        console.log("Unique folders found:", uniqueFolders);
-
-        for (const folder of uniqueFolders) {
-          const folderContent = content.folder(folder);
-          const imageFiles = folderContent.file(/.*\.(jpg|jpeg|png)$/i);
-          console.log(`Checking folder '${folder}': ${imageFiles.length} image files`);
-          if (imageFiles.length > 0) {
-            imageFolder = folderContent;
-            console.log(`Found image folder: ${folder}`);
-            break;
+        if (!imageFolder && split !== 'all') {
+          // If we're looking for a specific split and didn't find it, try fallback logic
+          // (Only for single split mode to avoid duplicates in 'all' mode)
+          const folders = Object.keys(content.files).filter(key => key.includes('/') && !key.includes('.')).map(key => key.split('/')[0]);
+          const uniqueFolders = [...new Set(folders)];
+          for (const folder of uniqueFolders) {
+            const folderContent = content.folder(folder);
+            const imageFiles = folderContent.file(/.*\.(jpg|jpeg|png)$/i);
+            if (imageFiles.length > 0) {
+              imageFolder = folderContent;
+              break;
+            }
           }
+          if (!imageFolder) imageFolder = content;
+          labelFolder = content.folder("labels") || content;
         }
 
-        // If still no image folder, try root level images
-        if (!imageFolder) {
-          console.log("No image folder found, using root directory");
-          imageFolder = content;
-        }
+        if (imageFolder) {
+          const imageList = imageFolder.file(/.*\.(jpg|jpeg|png)$/i);
 
-        // Set label folder to the same base or labels folder
-        labelFolder = content.folder("labels") || content;
-      }
+          for (let i = 0; i < imageList.length; i++) {
+            const imageFile = imageList[i];
+            const imageData = await imageFile.async("base64");
+            const imageName = imageFile.name.split("/").pop();
 
-      if (imageFolder) {
-        const imageList = imageFolder.file(/.*\.(jpg|jpeg|png)$/i);
+            // Check if we have modified annotations for this image
+            const imageKey = `${currentSplit}/${imageName}`;
+            if (currentModifiedImages[currentSplit] && currentModifiedImages[currentSplit][imageKey]) {
+              extractedImages.push({
+                id: `img_${totalImageCounter++}`,
+                name: imageName,
+                src: `data:image/jpeg;base64,${imageData}`,
+                annotations: currentModifiedImages[currentSplit][imageKey],
+                split: currentSplit
+              });
+            } else {
+              const labelFileName = imageName.replace(/\.[^/.]+$/, ".txt");
+              let labelFile = labelFolder?.file(labelFileName);
 
-        for (let i = 0; i < imageList.length; i++) {
-          const imageFile = imageList[i];
-          const imageData = await imageFile.async("base64");
-          const imageName = imageFile.name.split("/").pop();
-
-          // Check if we have modified annotations for this image
-          const imageKey = `${split}/${imageName}`;
-          if (currentModifiedImages[split] && currentModifiedImages[split][imageKey]) {
-            // Use modified annotations
-            extractedImages.push({
-              id: i,
-              name: imageName,
-              src: `data:image/jpeg;base64,${imageData}`,
-              annotations: currentModifiedImages[split][imageKey]
-            });
-          } else {
-            // Load original annotations
-            const labelFileName = imageName.replace(/\.[^/.]+$/, ".txt");
-            let labelFile = labelFolder?.file(labelFileName);
-
-            // If not found, try to find in the same folder as the image
-            if (!labelFile && imageFile.name.includes('/')) {
-              const imagePathParts = imageFile.name.split('/');
-              imagePathParts.pop(); // Remove filename
-              const imageFolderPath = imagePathParts.join('/');
-              const imageBaseFolder = content.folder(imageFolderPath);
-              if (imageBaseFolder) {
-                const labelsFolderPath = imageFolderPath.replace('/images', '/labels');
-                const labelsFolder = content.folder(labelsFolderPath);
-                labelFile = labelsFolder?.file(labelFileName) || imageBaseFolder.file(labelFileName);
+              if (!labelFile && imageFile.name.includes('/')) {
+                const imagePathParts = imageFile.name.split('/');
+                imagePathParts.pop();
+                const imageFolderPath = imagePathParts.join('/');
+                const imageBaseFolder = content.folder(imageFolderPath);
+                if (imageBaseFolder) {
+                  const labelsFolderPath = imageFolderPath.replace('/images', '/labels');
+                  const labelsFolder = content.folder(labelsFolderPath);
+                  labelFile = labelsFolder?.file(labelFileName) || imageBaseFolder.file(labelFileName);
+                }
               }
-            }
 
-            let imageAnnotations = [];
-            if (labelFile) {
-              const labelContent = await labelFile.async("text");
-              imageAnnotations = parseAnnotations(labelContent);
-            }
+              let imageAnnotations = [];
+              if (labelFile) {
+                const labelContent = await labelFile.async("text");
+                imageAnnotations = parseAnnotations(labelContent);
+              }
 
-            // Load patches if any
-            let imagePatches = [];
-            if (currentModifiedPatches[split] && currentModifiedPatches[split][imageKey]) {
-              imagePatches = currentModifiedPatches[split][imageKey];
-            }
+              let imagePatches = [];
+              if (currentModifiedPatches[currentSplit] && currentModifiedPatches[currentSplit][imageKey]) {
+                imagePatches = currentModifiedPatches[currentSplit][imageKey];
+              }
 
-            extractedImages.push({
-              id: i,
-              name: imageName,
-              src: `data:image/jpeg;base64,${imageData}`,
-              annotations: imageAnnotations,
-              patches: imagePatches
-            });
+              extractedImages.push({
+                id: `img_${totalImageCounter++}`,
+                name: imageName,
+                src: `data:image/jpeg;base64,${imageData}`,
+                annotations: imageAnnotations,
+                patches: imagePatches,
+                split: currentSplit
+              });
+            }
           }
         }
-
-        setImages(extractedImages);
-        if (extractedImages.length > 0) {
-          setAnnotations(extractedImages[0].annotations);
-          setPatches(extractedImages[0].patches || []);
-          setCurrentImageIndex(0);
-        } else {
-          setAnnotations([]);
-          setPatches([]);
-          setCurrentImageIndex(0);
-        }
-
-        // Reset selections
-        setSelectedAnnotation(null);
-        setNewAnnotation(null);
-        setEditingAnnotation(null);
-        setHoveredAnnotation(null);
-        setSelectedAnnotations([]);
-      } else {
-        console.warn(`No image folder found for split ${split}`);
-        console.warn("Available files:", Object.keys(content.files).slice(0, 30));
-        alert(`Warning: No images found for the ${split} split. The ZIP file may have a different structure than expected.`);
       }
+
+      setImages(extractedImages);
+      if (extractedImages.length > 0) {
+        setAnnotations(extractedImages[0].annotations || []);
+        setPatches(extractedImages[0].patches || []);
+        setCurrentImageIndex(0);
+      } else {
+        setAnnotations([]);
+        setPatches([]);
+        setCurrentImageIndex(0);
+        if (split !== 'all') {
+          alert(`Warning: No images found for the ${split} split.`);
+        }
+      }
+
+      // Reset selections
+      setSelectedAnnotation(null);
+      setNewAnnotation(null);
+      setEditingAnnotation(null);
+      setHoveredAnnotation(null);
+      setSelectedAnnotations([]);
     } catch (error) {
       console.error("Error loading dataset for split:", error);
-      alert("Error loading dataset for the selected split:\n" + error.message + "\n\nPlease check the browser console (F12) for more details.");
+      alert("Error loading dataset: " + error.message);
     }
   };
 
@@ -599,19 +559,22 @@ const App = () => {
 
     if (dataset && images.length > 0) {
       // Save current image annotations
-      const currentImageName = images[currentImageIndex]?.name;
+      const currentImageObj = images[currentImageIndex];
+      const currentImageName = currentImageObj?.name;
+      const currentImageSplit = currentImageObj?.split || datasetSplit;
+
       if (currentImageName) {
-        const imageKey = `${datasetSplit}/${currentImageName}`;
+        const imageKey = `${currentImageSplit}/${currentImageName}`;
 
-        if (!updatedModifiedImages[datasetSplit]) {
-          updatedModifiedImages[datasetSplit] = {};
+        if (!updatedModifiedImages[currentImageSplit]) {
+          updatedModifiedImages[currentImageSplit] = {};
         }
-        updatedModifiedImages[datasetSplit][imageKey] = annotations;
+        updatedModifiedImages[currentImageSplit][imageKey] = annotations;
 
-        if (!updatedModifiedPatches[datasetSplit]) {
-          updatedModifiedPatches[datasetSplit] = {};
+        if (!updatedModifiedPatches[currentImageSplit]) {
+          updatedModifiedPatches[currentImageSplit] = {};
         }
-        updatedModifiedPatches[datasetSplit][imageKey] = patches;
+        updatedModifiedPatches[currentImageSplit][imageKey] = patches;
       }
 
       setModifiedImages(updatedModifiedImages);
@@ -693,22 +656,24 @@ const App = () => {
     if (images.length > 0 && currentImageIndex < images.length) {
       const updatedModifiedImages = { ...modifiedImages };
       const updatedModifiedPatches = { ...modifiedPatches };
-      const currentImageName = images[currentImageIndex]?.name;
+      const currentImageObj = images[currentImageIndex];
+      const currentImageName = currentImageObj?.name;
+      const currentImageSplit = currentImageObj?.split || datasetSplit;
 
       if (currentImageName) {
-        const imageKey = `${datasetSplit}/${currentImageName}`;
+        const imageKey = `${currentImageSplit}/${currentImageName}`;
 
         // Save annotations
-        if (!updatedModifiedImages[datasetSplit]) {
-          updatedModifiedImages[datasetSplit] = {};
+        if (!updatedModifiedImages[currentImageSplit]) {
+          updatedModifiedImages[currentImageSplit] = {};
         }
-        updatedModifiedImages[datasetSplit][imageKey] = annotations;
+        updatedModifiedImages[currentImageSplit][imageKey] = annotations;
 
         // Save patches
-        if (!updatedModifiedPatches[datasetSplit]) {
-          updatedModifiedPatches[datasetSplit] = {};
+        if (!updatedModifiedPatches[currentImageSplit]) {
+          updatedModifiedPatches[currentImageSplit] = {};
         }
-        updatedModifiedPatches[datasetSplit][imageKey] = patches;
+        updatedModifiedPatches[currentImageSplit][imageKey] = patches;
       }
       setModifiedImages(updatedModifiedImages);
       setModifiedPatches(updatedModifiedPatches);
@@ -758,22 +723,23 @@ const App = () => {
 
   // Helper to update patches for current image
   const updateImagePatches = (index, updatedPatches) => {
-    // Determine the split to use (default to current if not specified)
-    // Note: This matches updateImageAnnotations logic pattern
     const updatedImages = [...images];
     if (updatedImages[index]) {
       updatedImages[index].patches = updatedPatches;
       setImages(updatedImages);
     }
 
+    // Update modifiedPatches state
     const updatedModifiedPatches = { ...modifiedPatches };
-    const currentImageName = updatedImages[index]?.name;
-    if (currentImageName) {
-      const imageKey = `${datasetSplit}/${currentImageName}`;
-      if (!updatedModifiedPatches[datasetSplit]) {
-        updatedModifiedPatches[datasetSplit] = {};
+    const imageObj = images[index];
+    const imageName = imageObj?.name;
+    const imageSplit = imageObj?.split || datasetSplit;
+    if (imageName) {
+      const imageKey = `${imageSplit}/${imageName}`;
+      if (!updatedModifiedPatches[imageSplit]) {
+        updatedModifiedPatches[imageSplit] = {};
       }
-      updatedModifiedPatches[datasetSplit][imageKey] = updatedPatches;
+      updatedModifiedPatches[imageSplit][imageKey] = updatedPatches;
       setModifiedPatches(updatedModifiedPatches);
     }
   };
@@ -1110,13 +1076,15 @@ const App = () => {
 
     // Update modifiedImages state
     const updatedModifiedImages = { ...modifiedImages };
-    const imageName = images[imageIndex]?.name;
+    const imageObj = images[imageIndex];
+    const imageName = imageObj?.name;
+    const imageSplit = imageObj?.split || datasetSplit;
     if (imageName) {
-      const imageKey = `${datasetSplit}/${imageName}`;
-      if (!updatedModifiedImages[datasetSplit]) {
-        updatedModifiedImages[datasetSplit] = {};
+      const imageKey = `${imageSplit}/${imageName}`;
+      if (!updatedModifiedImages[imageSplit]) {
+        updatedModifiedImages[imageSplit] = {};
       }
-      updatedModifiedImages[datasetSplit][imageKey] = updatedAnnotations;
+      updatedModifiedImages[imageSplit][imageKey] = updatedAnnotations;
       setModifiedImages(updatedModifiedImages);
     }
 
@@ -1463,7 +1431,8 @@ const App = () => {
       return;
     }
 
-    const imageKey = `${datasetSplit}/${currentImage.name}`;
+    const currentImageSplit = currentImage.split || datasetSplit;
+    const imageKey = `${currentImageSplit}/${currentImage.name}`;
     setDeletedImages(prev => [...prev, imageKey]);
 
     // Remove from images list
@@ -1485,34 +1454,33 @@ const App = () => {
     }
   };
 
-  // Batch navigation
-  const goToPreviousBatch = () => {
-    if (batchStartIndex >= batchSize) {
-      setBatchStartIndex(batchStartIndex - batchSize);
-    }
-  };
 
-  const goToNextBatch = () => {
-    if (batchStartIndex + batchSize < images.length) {
-      setBatchStartIndex(batchStartIndex + batchSize);
-    }
-  };
 
   // Save annotations
   const saveAnnotations = () => {
     // Save current annotations to modifiedImages
     if (images.length > 0 && currentImageIndex < images.length) {
       const updatedModifiedImages = { ...modifiedImages };
+      const currentImageObj = images[currentImageIndex];
+      const currentImageName = currentImageObj?.name;
+      const currentImageSplit = currentImageObj?.split || datasetSplit;
 
-      // Save current image annotations
-      const currentImageName = images[currentImageIndex]?.name;
       if (currentImageName) {
-        const imageKey = `${datasetSplit}/${currentImageName}`;
-        if (!updatedModifiedImages[datasetSplit]) {
-          updatedModifiedImages[datasetSplit] = {};
+        const imageKey = `${currentImageSplit}/${currentImageName}`;
+
+        if (!updatedModifiedImages[currentImageSplit]) {
+          updatedModifiedImages[currentImageSplit] = {};
         }
-        updatedModifiedImages[datasetSplit][imageKey] = annotations;
+        updatedModifiedImages[currentImageSplit][imageKey] = annotations;
         setModifiedImages(updatedModifiedImages);
+
+        // Also update the patches
+        const updatedModifiedPatches = { ...modifiedPatches };
+        if (!updatedModifiedPatches[currentImageSplit]) {
+          updatedModifiedPatches[currentImageSplit] = {};
+        }
+        updatedModifiedPatches[currentImageSplit][imageKey] = patches;
+        setModifiedPatches(updatedModifiedPatches);
       }
     }
 
@@ -1541,14 +1509,11 @@ const App = () => {
 
     // We'll also prepare the modifiedImages update
     const nextModifiedImages = { ...modifiedImages };
-    if (!nextModifiedImages[datasetSplit]) {
-      nextModifiedImages[datasetSplit] = {};
-    }
-    const splitCache = nextModifiedImages[datasetSplit];
 
     try {
       for (let i = 0; i < newImages.length; i++) {
         const image = newImages[i];
+        const imageSplit = image.split || datasetSplit;
 
         try {
           // Convert base64 to blob
@@ -1593,7 +1558,7 @@ const App = () => {
                 classId: editorClassId !== -1 ? editorClassId : ann.classId,
                 centerX: ann.centerX,
                 centerY: ann.centerY,
-                width: ann.width, // Provide fallback if undefined? No, backend provides it.
+                width: ann.width,
                 height: ann.height,
                 type: 'rectangle'
               };
@@ -1610,8 +1575,11 @@ const App = () => {
             };
 
             // Update cache
-            const imageKey = `${datasetSplit}/${image.name}`;
-            splitCache[imageKey] = mergedAnns;
+            const imageKey = `${imageSplit}/${image.name}`;
+            if (!nextModifiedImages[imageSplit]) {
+              nextModifiedImages[imageSplit] = {};
+            }
+            nextModifiedImages[imageSplit][imageKey] = mergedAnns;
 
             successCount++;
             totalAnnotationsAdded += newPredictions.length;
@@ -1865,9 +1833,9 @@ const App = () => {
     const yamlContent = yaml.dump(datasetConfigToSave);
     zip.file("dataset.yaml", yamlContent);
 
-    // Create folders for each split
+    // Create folders for each split (excluding virtual 'all' split)
     const splitFolders = {};
-    availableSplits.forEach(split => {
+    availableSplits.filter(s => s !== 'all').forEach(split => {
       splitFolders[split] = zip.folder(split);
       splitFolders[split].folder("images");
       splitFolders[split].folder("labels");
@@ -1922,7 +1890,7 @@ const App = () => {
       }
     } else {
       // Process each split (original ZIP file approach)
-      for (const split of availableSplits) {
+      for (const split of availableSplits.filter(s => s !== 'all')) {
         const zipContent = await JSZip.loadAsync(dataset);
         let imageFolder;
         if (split === 'train') {
@@ -2029,94 +1997,7 @@ const App = () => {
     return await zip.generateAsync({ type: "blob" });
   };
 
-  // Sync to Backend Auto-Save Endpoint
-  const handleSyncToLocalFolder = async () => {
-    if (!autoSyncDirectory) {
-      alert("Please enter a valid Auto-Save Directory.");
-      return;
-    }
 
-    setIsSyncing(true);
-    try {
-      const blob = await generateDatasetBlob();
-
-      const formData = new FormData();
-      formData.append("file", blob, "dataset.zip");
-      formData.append("directory", autoSyncDirectory);
-
-      const response = await fetch("http://localhost:8000/autosave", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Failed to sync to target directory");
-      }
-
-      setLastSyncTime(new Date());
-    } catch (error) {
-      console.error("Auto-sync error:", error);
-      alert("Error during auto-sync: " + error.message);
-      setIsAutoSyncEnabled(false); // Disable auto-sync if it fails
-    } finally {
-      setIsSyncing(false);
-    }
-  };
-
-  // Load dataset from Local Folder
-  const handleLoadFromLocalFolder = async () => {
-    if (!autoSyncDirectory) {
-      alert("Please enter a valid Auto-Save Directory to load from.");
-      return;
-    }
-
-    setIsSyncing(true); // Reusing syncing state indicator
-    try {
-      const formData = new FormData();
-      formData.append("directory", autoSyncDirectory);
-
-      const response = await fetch("http://localhost:8000/load_dataset", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Failed to load from target directory");
-      }
-
-      // Convert response to a blob
-      const blob = await response.blob();
-
-      // Pass a "name" property mimicking a File object so JSZip logic handles it
-      blob.name = "loaded_dataset.zip";
-
-      // Route the blob through onDrop to trigger the full JSZip parsing logic
-      await onDrop([blob]);
-
-    } catch (error) {
-      console.error("Load dataset error:", error);
-      alert("Error loading dataset: " + error.message);
-    } finally {
-      setIsSyncing(false);
-    }
-  };
-
-  // Auto-Sync Effect Hook (runs every 30 seconds if enabled)
-  useEffect(() => {
-    let interval;
-    if (isAutoSyncEnabled && autoSyncDirectory && dataset) {
-      interval = setInterval(() => {
-        // Trigger auto-sync silently
-        handleSyncToLocalFolder().catch(err => {
-          console.error("Silent auto-sync failed:", err);
-          setIsAutoSyncEnabled(false);
-        });
-      }, 30000); // 30 seconds
-    }
-    return () => clearInterval(interval);
-  }, [isAutoSyncEnabled, autoSyncDirectory, dataset, images, classes, deletedImages, modifiedImages, modifiedPatches]);
 
   // Download modified dataset in YOLO format
   const downloadDataset = async () => {
@@ -2578,25 +2459,7 @@ const App = () => {
                 </button>
                 {dataset && (
                   <>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#e8f4f8', padding: '5px 10px', borderRadius: '5px', marginLeft: '10px' }}>
-                      <button
-                        className="button"
-                        onClick={handleSyncToLocalFolder}
-                        disabled={isSyncing}
-                        style={{ backgroundColor: '#3498db', padding: '5px 10px' }}
-                      >
-                        {isSyncing ? '🔄 Syncing...' : '💾 Sync Now'}
-                      </button>
-                      <label style={{ marginLeft: '10px', fontSize: '0.9rem', display: 'flex', alignItems: 'center', cursor: 'pointer', color: '#333' }}>
-                        <input
-                          type="checkbox"
-                          checked={isAutoSyncEnabled}
-                          onChange={(e) => setIsAutoSyncEnabled(e.target.checked)}
-                          style={{ marginRight: '5px' }}
-                        />
-                        Auto-Sync (30s)
-                      </label>
-                    </div>
+
                     <button className="tool-button" onClick={downloadDataset} style={{ width: 'auto', padding: '0 10px', marginLeft: '10px' }} title="Download YOLO">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -2658,28 +2521,7 @@ const App = () => {
                   </div>
 
                   {/* Option 2: Load from Auto-Save Directory */}
-                  <div className="start-option-card">
-                    <h4>📂 Load from Auto-Save Local Directory</h4>
-                    <p>Load your previously synced YOLO dataset directly from your computer</p>
-                    <div className="form-group" style={{ marginTop: '1rem' }}>
-                      <label>Local Directory Path:</label>
-                      <input
-                        type="text"
-                        placeholder="e.g., C:\Datasets\MyProject"
-                        value={autoSyncDirectory}
-                        onChange={(e) => setAutoSyncDirectory(e.target.value)}
-                        style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
-                      />
-                      <button
-                        className="button"
-                        onClick={handleLoadFromLocalFolder}
-                        disabled={isSyncing}
-                        style={{ width: '100%', backgroundColor: '#3498db' }}
-                      >
-                        {isSyncing ? '🔄 Loading...' : '📥 Load Dataset'}
-                      </button>
-                    </div>
-                  </div>
+
 
                   {/* Option 3: Start from Scratch */}
                   <div className="start-option-card">
@@ -2782,22 +2624,7 @@ const App = () => {
                     </p>
                   </div>
 
-                  {/* Auto-Save Directory Settings */}
-                  <div className="form-group">
-                    <label>Auto-Save Local Directory:</label>
-                    <input
-                      type="text"
-                      placeholder="e.g., C:\Datasets\MyProject"
-                      value={autoSyncDirectory}
-                      onChange={(e) => setAutoSyncDirectory(e.target.value)}
-                      title="Used by the 'Sync Now' and 'Auto-Sync' features"
-                      style={{ width: '100%', marginBottom: '5px', borderColor: isAutoSyncEnabled ? '#3498db' : '#ccc' }}
-                    />
-                    <p style={{ fontSize: '0.8rem', color: '#7f8c8d', marginBottom: '10px' }}>
-                      Paths are processed by your local backend. Extracts YOLO dataset directly to this folder.
-                      {lastSyncTime && <span style={{ display: 'block', color: '#27ae60', marginTop: '2px' }}>Last synced: {lastSyncTime.toLocaleTimeString()}</span>}
-                    </p>
-                  </div>
+
 
                   {/* Dataset Split Selection */}
                   <div className="form-group">
@@ -2959,117 +2786,81 @@ const App = () => {
                   </div>
 
 
-                  <div className="batch-navigation">
-                    <h3>🖼️ Images ({images.length})</h3>
-                    <div className="batch-controls">
-                      <button
-                        className="nav-button"
-                        onClick={goToPreviousBatch}
-                        disabled={batchStartIndex === 0}
-                      >
-                        ◀ Prev Batch
-                      </button>
-                      <span>
-                        Batch {currentBatchIndex} of {totalBatches}
-                      </span>
-                      <button
-                        className="nav-button"
-                        onClick={goToNextBatch}
-                        disabled={batchStartIndex + batchSize >= images.length}
-                      >
-                        Next Batch ▶
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Batch Navigation - existing code */}
-                  <div className="batch-navigation">
-                    <h3>Images ({images.length})</h3>
-                    <div className="batch-controls">
-                      <button className="nav-button" onClick={goToPreviousBatch} disabled={batchStartIndex === 0}>
-                        Prev Batch
-                      </button>
-                      <span>Batch {currentBatchIndex} of {totalBatches}</span>
-                      <button className="nav-button" onClick={goToNextBatch} disabled={batchStartIndex + batchSize >= images.length}>
-                        Next Batch
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Class-wise Batch Filter */}
+                  {/* Class Filter */}
                   <div className="form-group" style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #e0e0e0' }}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={isClassWiseBatch}
-                        onChange={(e) => {
-                          setIsClassWiseBatch(e.target.checked);
-                          setBatchStartIndex(0); // Reset to first batch
-                          if (e.target.checked) {
-                            setClassWiseBatchClass(classes.indexOf(selectedClass));
-                          }
-                        }}
-                      />
-                      {' '}Filter batch by class
-                    </label>
+                    <label>🔍 Filter Images by Class:</label>
+                    <select
+                      value={imageClassFilter !== null ? imageClassFilter : 'all'}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setImageClassFilter(val === 'all' ? null : parseInt(val));
+                      }}
+                      style={{ marginTop: '10px', width: '100%' }}
+                    >
+                      <option value="all">🖼️ All Images ({images.length})</option>
+                      {classes.map((cls, index) => {
+                        const imageCount = getImagesWithClass(index).length;
+                        return (
+                          <option key={index} value={index}>
+                            {cls} ({imageCount})
+                          </option>
+                        );
+                      })}
+                    </select>
 
-                    {isClassWiseBatch && (
-                      <>
-                        <select
-                          value={classWiseBatchClass !== null ? classWiseBatchClass : classes.indexOf(selectedClass)}
-                          onChange={(e) => {
-                            setClassWiseBatchClass(parseInt(e.target.value));
-                            setBatchStartIndex(0); // Reset to first batch when changing class
-                          }}
-                          style={{ marginTop: '10px', width: '100%' }}
-                        >
-                          {classes.map((cls, index) => {
-                            const imageCount = getImagesWithClass(index).length;
-                            return (
-                              <option key={index} value={index}>
-                                {cls} ({imageCount} images)
-                              </option>
-                            );
-                          })}
-                        </select>
-
-                        <p style={{ fontSize: '0.8rem', color: '#7f8c8d', marginTop: '5px' }}>
-                          Showing {getImagesWithClass(classWiseBatchClass).length} images with "{classes[classWiseBatchClass]}" annotations
-                        </p>
-                      </>
-                    )}
+                    <p style={{ fontSize: '0.8rem', color: '#7f8c8d', marginTop: '8px' }}>
+                      {imageClassFilter === null
+                        ? `Showing all ${images.length} images`
+                        : `Showing ${displayImages.length} images containing "${classes[imageClassFilter]}"`
+                      }
+                    </p>
                   </div>
 
 
 
-                  {/* Thumbnail Grid */}
-                  <div className="thumbnail-grid">
-                    {currentBatch.map((image, batchIndex) => {
-                      // Find the actual index in the displayImages array
-                      const displayIndex = displayImages.findIndex(img => img.id === image.id);
-                      // Find the actual index in the original images array
-                      const actualImageIndex = images.findIndex(img => img.id === image.id);
 
-                      return (
-                        <div
-                          key={image.id}
-                          className={`thumbnail-item ${actualImageIndex === currentImageIndex ? 'active' : ''}`}
-                          onClick={() => handleImageSelect(actualImageIndex)}
-                        >
-                          <div className="thumbnail-image-container">
-                            <img
-                              src={image.src}
-                              alt={image.name}
-                              className="thumbnail-image"
-                            />
+
+                  <div className="thumbnail-grid" style={{ marginTop: '20px' }}>
+                    {displayImages && displayImages.length > 0 ? (
+                      displayImages.map((image, idx) => {
+                        // Find the actual index in the images array
+                        const actualImageIndex = images.findIndex(img => img.id === image.id);
+
+                        return (
+                          <div
+                            key={image.id !== undefined ? `img-${image.id}` : `idx-${idx}`}
+                            className={`thumbnail-item ${actualImageIndex === currentImageIndex ? 'active' : ''}`}
+                            onClick={() => handleImageSelect(actualImageIndex)}
+                            style={{ minHeight: '120px' }}
+                          >
+                            <div className="thumbnail-image-container">
+                              {image.src ? (
+                                <img
+                                  src={image.src}
+                                  alt={image.name}
+                                  className="thumbnail-image"
+                                  style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                                />
+                              ) : (
+                                <div style={{ color: '#7f8c8d', fontSize: '0.7rem' }}>No Preview</div>
+                              )}
+                            </div>
+                            <div className="thumbnail-info">
+                              <span className="thumbnail-name" style={{ fontSize: '0.75rem', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {image.name || 'Untitled'}
+                              </span>
+                              <span className="thumbnail-count" style={{ fontSize: '0.7rem', color: '#7f8c8d' }}>
+                                {(image.annotations?.length || 0)} annotations
+                              </span>
+                            </div>
                           </div>
-                          <div className="thumbnail-info">
-                            <span className="thumbnail-name">{image.name}</span>
-                            <span className="thumbnail-count">{image.annotations.length} annotations</span>
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })
+                    ) : (
+                      <div style={{ gridColumn: 'span 2', padding: '20px', textAlign: 'center', color: '#ecf0f1', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
+                        No images found for this filter.
+                      </div>
+                    )}
                   </div>
 
 
@@ -3250,46 +3041,7 @@ const App = () => {
                     </div>
                   )}
 
-                  {/* Annotations List */}
-                  {annotations.length > 0 && (
-                    <div className="annotation-list">
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                        <h3>📝 Annotations ({annotations.length})</h3>
-                        {selectedAnnotations.length > 1 && (
-                          <button
-                            className="delete-btn"
-                            onClick={handleMultipleAnnotationDelete}
-                            style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}
-                          >
-                            Delete {selectedAnnotations.length} Selected
-                          </button>
-                        )}
-                      </div>
-                      {annotations.map((annotation) => (
-                        <div
-                          key={annotation.id}
-                          className={`annotation-item ${selectedAnnotations.includes(annotation.id) ? 'active' : ''}`}
-                          onClick={(e) => handleAnnotationSelect(annotation, e)}
-                        >
-                          <div className="annotation-item-header">
-                            <h4>Annotation #{annotation.id}</h4>
-                            <button
-                              className="delete-btn"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleAnnotationDelete(annotation.id);
-                              }}
-                            >
-                              Delete
-                            </button>
-                          </div>
-                          <p>Class: {classes[annotation.classId] || 'Unknown'}</p>
-                          <p>Center: ({annotation.centerX.toFixed(3)}, {annotation.centerY.toFixed(3)})</p>
-                          <p>Size: {annotation.width.toFixed(3)} × {annotation.height.toFixed(3)}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+
                 </>
               )}
             </div>
