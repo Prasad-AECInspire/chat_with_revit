@@ -1,6 +1,6 @@
 // src/hooks/useMemoryMonitor.js
 import { useState, useEffect, useCallback } from 'react';
-import { invoke } from '@tauri-apps/api/core';
+import { invoke } from "@tauri-apps/api/tauri"
 
 export const useMemoryMonitor = (interval = 5000) => {
   const [memoryInfo, setMemoryInfo] = useState({

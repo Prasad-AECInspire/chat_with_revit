@@ -49,7 +49,7 @@ const ImageUploader = ({ onUpload, setCurrentView }) => {
           {...getRootProps()}
           className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all
             ${isDragActive
-              ? "border-cyan-500 bg-cyan-500/5 text-cyan-400"
+              ? "border-yellow-400 bg-yellow-400/5 text-yellow-300"
               : "border-white/10 bg-zinc-950 text-zinc-500 hover:border-white/20 hover:text-zinc-400"
             }`}
         >
@@ -57,7 +57,7 @@ const ImageUploader = ({ onUpload, setCurrentView }) => {
           <div className="text-3xl mb-3">📁</div>
           {isDragActive
             ? <p className="text-sm">Drop the files here...</p>
-            : <p className="text-sm">Drag & drop images here, or <span className="text-cyan-400 underline">click to select</span></p>
+            : <p className="text-sm">Drag & drop images here, or <span className="text-yellow-300 underline">click to select</span></p>
           }
           <p className="text-xs text-zinc-600 mt-2">PNG, JPG, GIF, WEBP — max 10MB each</p>
         </div>
@@ -90,7 +90,7 @@ const ImageUploader = ({ onUpload, setCurrentView }) => {
               className={`self-center px-8 py-2.5 rounded-lg text-sm font-semibold transition-all
                 ${isUploading
                   ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
-                  : "bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 hover:border-cyan-500 text-cyan-400"
+                  : "bg-yellow-400/15 hover:bg-yellow-400/25 border border-yellow-400/30 hover:border-yellow-400 text-yellow-300"
                 }`}
             >
               {isUploading ? "Uploading..." : `Upload ${selectedFiles.length} Image${selectedFiles.length !== 1 ? "s" : ""}`}

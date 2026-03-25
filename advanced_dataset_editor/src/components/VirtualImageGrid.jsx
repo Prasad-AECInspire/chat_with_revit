@@ -18,7 +18,7 @@ const VirtualImageGrid = ({ images = [], onImageClick, selectedIndex, columnCoun
               onClick={() => onImageClick?.(index)}
               className={`flex flex-col rounded-lg border cursor-pointer transition-all overflow-hidden
                 ${isSelected
-                  ? "border-cyan-500 bg-cyan-500/8 shadow-[0_0_0_1px_#06b6d4]"
+                  ? "border-yellow-400 bg-yellow-400/8 shadow-[0_0_0_1px_#f5c518]"
                   : "border-white/6 bg-zinc-900 hover:border-white/14 hover:bg-zinc-800"
                 }`}
             >
@@ -29,7 +29,7 @@ const VirtualImageGrid = ({ images = [], onImageClick, selectedIndex, columnCoun
                   : <div className="w-full h-full bg-zinc-800" />
                 }
                 {count > 0 && (
-                  <span className="absolute top-1 right-1 bg-cyan-500/80 text-black text-[9px] font-bold font-mono px-1 rounded">
+                  <span className="absolute top-1 right-1 bg-yellow-400/80 text-black text-[9px] font-bold font-mono px-1 rounded">
                     {count}
                   </span>
                 )}

@@ -1,17 +1,17 @@
 :root {
-  --bg-dark: #0a0a12;
-  --bg-panel: #161623;
-  --bg-panel-transparent: rgba(22, 22, 35, 0.85);
-  --primary-neon: #00f3ff;
-  --secondary-neon: #bc13fe;
-  --accent-neon: #ff0055;
+  --bg-dark: #0d0b00;
+  --bg-panel: #1a1500;
+  --bg-panel-transparent: rgba(26, 21, 0, 0.85);
+  --primary-neon: #f5c518;
+  --secondary-neon: #ff9500;
+  --accent-neon: #ff3333;
   --text-primary: #ffffff;
   --text-secondary: #b3b3b3;
-  --border-color: #2a2a35;
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glow-primary: 0 0 10px rgba(0, 243, 255, 0.5);
-  --glow-secondary: 0 0 10px rgba(188, 19, 254, 0.5);
-  --glow-accent: 0 0 10px rgba(255, 0, 85, 0.5);
+  --border-color: #2e2800;
+  --glass-border: rgba(245, 197, 24, 0.12);
+  --glow-primary: 0 0 10px rgba(245, 197, 24, 0.5);
+  --glow-secondary: 0 0 10px rgba(255, 149, 0, 0.5);
+  --glow-accent: 0 0 10px rgba(255, 51, 51, 0.5);
   --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -54,7 +54,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: radial-gradient(circle at top right, #1a1a2e 0%, var(--bg-dark) 40%);
+  background: radial-gradient(circle at top right, #1a1600 0%, var(--bg-dark) 40%);
 }
 
 /* Header */
@@ -78,14 +78,14 @@ body {
 .header h3 {
   font-size: 1.2rem;
   margin: 0;
-  background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
+  background: linear-gradient(90deg, #f5c518, #ff9500);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
-  text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+  text-shadow: 0 0 20px rgba(245, 197, 24, 0.3);
   white-space: nowrap;
 }
 
@@ -203,7 +203,7 @@ body {
 .management-card:hover {
   transform: translateY(-5px);
   border-color: var(--primary-neon);
-  box-shadow: 0 10px 30px rgba(0, 243, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(245, 197, 24, 0.1);
 }
 
 .management-card h4 {
@@ -239,7 +239,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: #050508;
+  background-color: #0d0a00;
   position: relative;
 }
 
@@ -296,7 +296,7 @@ body {
 .button:hover,
 .nav-button:hover,
 .tool-button:hover:not(.active) {
-  background: rgba(0, 243, 255, 0.1);
+  background: rgba(245, 197, 24, 0.1);
   border-color: var(--primary-neon);
   box-shadow: var(--glow-primary);
   color: var(--primary-neon);
@@ -315,7 +315,7 @@ body {
 
 /* Active States */
 .tool-button.active {
-  background: rgba(0, 243, 255, 0.2);
+  background: rgba(245, 197, 24, 0.2);
   border-color: var(--primary-neon);
   color: var(--primary-neon);
   box-shadow: var(--glow-primary);
@@ -323,13 +323,13 @@ body {
 
 /* Delete/Destructive Actions */
 .delete-btn {
-  background: rgba(255, 0, 85, 0.1);
-  border-color: rgba(255, 0, 85, 0.3);
+  background: rgba(255, 51, 51, 0.1);
+  border-color: rgba(255, 51, 51, 0.3);
   color: var(--accent-neon);
 }
 
 .delete-btn:hover {
-  background: rgba(255, 0, 85, 0.2);
+  background: rgba(255, 51, 51, 0.2);
   border-color: var(--accent-neon);
   box-shadow: var(--glow-accent);
   color: #fff;
@@ -363,10 +363,10 @@ body {
 
 .image-list-item.active,
 .annotation-item.active {
-  background-color: rgba(0, 243, 255, 0.1);
+  background-color: rgba(245, 197, 24, 0.1);
   border-color: var(--primary-neon);
   color: var(--primary-neon);
-  box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.1);
+  box-shadow: inset 0 0 10px rgba(245, 197, 24, 0.1);
 }
 
 .annotation-item-header {
@@ -415,7 +415,7 @@ body {
 .class-input:focus {
   outline: none;
   border-color: var(--primary-neon);
-  box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+  box-shadow: 0 0 10px rgba(245, 197, 24, 0.2);
 }
 
 /* Dropzone */
@@ -433,12 +433,12 @@ body {
 
 .dropzone:hover {
   border-color: var(--primary-neon);
-  background-color: rgba(0, 243, 255, 0.05);
+  background-color: rgba(245, 197, 24, 0.05);
   color: var(--text-primary);
 }
 
 .dropzone.active {
-  background-color: rgba(0, 243, 255, 0.1);
+  background-color: rgba(245, 197, 24, 0.1);
   border-color: var(--primary-neon);
   box-shadow: var(--glow-primary);
 }
@@ -495,9 +495,9 @@ body {
 }
 
 .thumbnail-item.active {
-  background-color: rgba(0, 243, 255, 0.1);
+  background-color: rgba(245, 197, 24, 0.1);
   border-color: var(--primary-neon);
-  box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+  box-shadow: 0 0 10px rgba(245, 197, 24, 0.1);
 }
 
 .thumbnail-image-container {
@@ -506,7 +506,7 @@ body {
   overflow: hidden;
   border-radius: 4px;
   margin-bottom: 0.5rem;
-  background-color: #000;
+  background-color: #0d0a00;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -562,7 +562,7 @@ body {
 .stats-card:hover {
   transform: translateY(-5px);
   border-color: var(--primary-neon);
-  box-shadow: 0 10px 30px rgba(0, 243, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(245, 197, 24, 0.1);
 }
 
 .class-stat-header h3,
@@ -577,7 +577,7 @@ body {
 .stat-number {
   color: var(--primary-neon);
   font-weight: 700;
-  text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+  text-shadow: 0 0 10px rgba(245, 197, 24, 0.3);
 }
 
 .stat-number {
@@ -585,10 +585,10 @@ body {
 }
 
 .stat-count {
-  background: rgba(0, 243, 255, 0.1);
+  background: rgba(245, 197, 24, 0.1);
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
-  border: 1px solid rgba(0, 243, 255, 0.3);
+  border: 1px solid rgba(245, 197, 24, 0.3);
 }
 
 .stat-bar-container {
@@ -657,7 +657,7 @@ body {
 .crop-viewer-content {
   background-color: var(--bg-panel);
   border: 1px solid var(--primary-neon);
-  box-shadow: 0 0 50px rgba(0, 243, 255, 0.15);
+  box-shadow: 0 0 50px rgba(245, 197, 24, 0.15);
   color: var(--text-primary);
   border-radius: 16px;
   width: 95%;
@@ -740,7 +740,7 @@ body {
   width: 100%;
   height: 100px;
   object-fit: contain;
-  background: #000;
+  background: #0d0a00;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -798,9 +798,9 @@ body {
 
 .bulk-delete-btn {
   padding: 0.5rem 1rem;
-  background: rgba(255, 0, 85, 0.1);
+  background: rgba(255, 51, 51, 0.1);
   color: var(--accent-neon);
-  border: 1px solid rgba(255, 0, 85, 0.3);
+  border: 1px solid rgba(255, 51, 51, 0.3);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -808,7 +808,7 @@ body {
 }
 
 .bulk-delete-btn:hover {
-  background: rgba(255, 0, 85, 0.2);
+  background: rgba(255, 51, 51, 0.2);
   border-color: var(--accent-neon);
 }
 
@@ -821,8 +821,8 @@ body {
 
 .crop-item.selected {
   border-color: var(--primary-neon);
-  box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
-  background: rgba(0, 243, 255, 0.05);
+  box-shadow: 0 0 15px rgba(245, 197, 24, 0.3);
+  background: rgba(245, 197, 24, 0.05);
 }
 
 .crop-checkbox-wrapper {
@@ -872,16 +872,16 @@ body {
 .crop-remove-btn {
   padding: 0.4rem;
   font-size: 0.8rem;
-  background: rgba(255, 0, 85, 0.1);
+  background: rgba(255, 51, 51, 0.1);
   color: var(--accent-neon);
-  border: 1px solid rgba(255, 0, 85, 0.3);
+  border: 1px solid rgba(255, 51, 51, 0.3);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .crop-remove-btn:hover {
-  background: rgba(255, 0, 85, 0.2);
+  background: rgba(255, 51, 51, 0.2);
   border-color: var(--accent-neon);
 }
 
@@ -937,11 +937,11 @@ body {
 .image-card:hover {
   border-color: var(--primary-neon);
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 243, 255, 0.1);
+  box-shadow: 0 5px 15px rgba(245, 197, 24, 0.1);
 }
 
 .image-preview {
-  background: #000;
+  background: #0d0a00;
 }
 
 .image-name {
@@ -949,14 +949,14 @@ body {
 }
 
 .class-badge {
-  background: rgba(188, 19, 254, 0.2);
+  background: rgba(255, 149, 0, 0.2);
   color: var(--secondary-neon);
-  border: 1px solid rgba(188, 19, 254, 0.4);
+  border: 1px solid rgba(255, 149, 0, 0.4);
 }
 
 /* Info Box */
 .info-box {
-  background: rgba(0, 243, 255, 0.05);
+  background: rgba(245, 197, 24, 0.05);
   border-left: 4px solid var(--primary-neon);
   color: var(--text-primary);
 }
@@ -986,15 +986,15 @@ body {
 /* Animations */
 @keyframes glow {
   0% {
-    box-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+    box-shadow: 0 0 5px rgba(245, 197, 24, 0.2);
   }
 
   50% {
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+    box-shadow: 0 0 20px rgba(245, 197, 24, 0.6);
   }
 
   100% {
-    box-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+    box-shadow: 0 0 5px rgba(245, 197, 24, 0.2);
   }
 }
 
@@ -1042,9 +1042,9 @@ body {
 
 .bulk-move-btn {
   padding: 0.5rem 1rem;
-  background: rgba(46, 204, 113, 0.1);
+  background: rgba(245, 197, 24, 0.1);
   color: var(--secondary-neon);
-  border: 1px solid rgba(46, 204, 113, 0.3);
+  border: 1px solid rgba(245, 197, 24, 0.3);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1052,9 +1052,9 @@ body {
 }
 
 .bulk-move-btn:hover {
-  background: rgba(46, 204, 113, 0.2);
+  background: rgba(245, 197, 24, 0.2);
   border-color: var(--secondary-neon);
-  box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
+  box-shadow: 0 0 10px rgba(245, 197, 24, 0.2);
 }
 
 .bulk-move-btn:disabled {

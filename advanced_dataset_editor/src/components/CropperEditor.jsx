@@ -44,8 +44,8 @@ const CropperEditor = ({ imageSrc, onCancel, onSave, isSaving }) => {
     onSave(canvas.toDataURL("image/png"));
   };
 
-  const btn = "inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-400 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 active:scale-95";
-  const inputCls = "w-20 bg-zinc-900/80 border border-white/10 focus:border-cyan-500/50 rounded-lg px-2 py-1 text-xs font-mono text-zinc-200 outline-none transition-all text-center";
+  const btn = "inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-yellow-400/50 text-zinc-300 hover:text-yellow-300 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 active:scale-95";
+  const inputCls = "w-20 bg-zinc-900/80 border border-white/10 focus:border-yellow-400/50 rounded-lg px-2 py-1 text-xs font-mono text-zinc-200 outline-none transition-all text-center";
 
   return (
     <div className="w-full space-y-5">
@@ -67,7 +67,7 @@ const CropperEditor = ({ imageSrc, onCancel, onSave, isSaving }) => {
             Manual
           </button>
           <button onClick={() => setMode("grid")}
-            className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${mode === "grid" ? "bg-cyan-500 text-black shadow-lg" : "text-zinc-500 hover:text-zinc-300"}`}>
+            className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${mode === "grid" ? "bg-yellow-400 text-black shadow-lg" : "text-zinc-500 hover:text-zinc-300"}`}>
             Grid Mode
           </button>
         </div>
@@ -148,7 +148,7 @@ const CropperEditor = ({ imageSrc, onCancel, onSave, isSaving }) => {
             </button>
             <motion.button onClick={handleSave} disabled={isSaving}
               whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-cyan-500 hover:bg-cyan-400 border border-transparent text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.2)] active:scale-95 disabled:opacity-30">
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-yellow-400 hover:bg-yellow-300 border border-transparent text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-[0_0_20px_rgba(245,197,24,0.2)] active:scale-95 disabled:opacity-30">
               {isSaving ? "Saving…" : "Apply & Save Crop"}
             </motion.button>
           </div>
@@ -164,14 +164,14 @@ const CropperEditor = ({ imageSrc, onCancel, onSave, isSaving }) => {
             onChange={(e) => setGridSizeInput(e.target.value)}
             onBlur={applyGridSize}
             onKeyDown={(e) => e.key === "Enter" && applyGridSize()}
-            className="w-24 bg-zinc-900/80 border border-white/10 focus:border-cyan-500/50 rounded-lg px-3 py-1.5 text-xs font-mono text-zinc-200 outline-none transition-all"
+            className="w-24 bg-zinc-900/80 border border-white/10 focus:border-yellow-400/50 rounded-lg px-3 py-1.5 text-xs font-mono text-zinc-200 outline-none transition-all"
           />
           <span className="text-[10px] text-zinc-600">px</span>
           <button onClick={applyGridSize} className={btn}>Apply</button>
           <div className="flex gap-1.5 ml-2">
             {[256, 512, 640, 1280].map((s) => (
               <button key={s} onClick={() => { setGridSize(s); setGridSizeInput(String(s)); }}
-                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all ${gridSize === s ? "bg-cyan-500/20 border-cyan-500/40 text-cyan-400" : "border-white/10 text-zinc-500 hover:text-zinc-300 hover:border-white/20"}`}>
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all ${gridSize === s ? "bg-yellow-400/20 border-yellow-400/40 text-yellow-300" : "border-white/10 text-zinc-500 hover:text-zinc-300 hover:border-white/20"}`}>
                 {s}
               </button>
             ))}

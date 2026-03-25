@@ -7,9 +7,9 @@ const ImageSelectionModal = ({ isOpen, files, onConfirm, onCancel }) => {
   const itemsPerPage = 24;
 
   // ── Shared Tailwind class helpers ──────────────────────────
-  const btn = "inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 border border-white/10 hover:border-cyan-500/50 text-zinc-400 hover:text-cyan-400 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed active:scale-95";
-  const btnPrimary = "inline-flex items-center gap-1.5 px-4 py-2 bg-cyan-500 hover:bg-cyan-400 border border-transparent text-black rounded-lg text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer shadow-[0_0_15px_rgba(6,182,212,0.2)] active:scale-95 disabled:opacity-30";
-  const inputCls = "bg-black/50 border border-white/10 focus:border-cyan-500/50 focus:ring-4 focus:ring-cyan-500/10 rounded-lg px-4 py-2 text-xs text-zinc-100 placeholder-zinc-600 outline-none transition-all w-full";
+  const btn = "inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 border border-white/10 hover:border-yellow-400/50 text-zinc-400 hover:text-yellow-300 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed active:scale-95";
+  const btnPrimary = "inline-flex items-center gap-1.5 px-4 py-2 bg-yellow-400 hover:bg-yellow-300 border border-transparent text-black rounded-lg text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer shadow-[0_0_15px_rgba(245,197,24,0.2)] active:scale-95 disabled:opacity-30";
+  const inputCls = "bg-black/50 border border-white/10 focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-400/10 rounded-lg px-4 py-2 text-xs text-zinc-100 placeholder-zinc-600 outline-none transition-all w-full";
 
   useEffect(() => {
     if (isOpen) {
@@ -62,7 +62,7 @@ const ImageSelectionModal = ({ isOpen, files, onConfirm, onCancel }) => {
   return (
     <div className="fixed inset-0 z-[1000] bg-black/90 backdrop-blur-xl flex items-center justify-center p-6 animate-in fade-in duration-300">
       <div className="bg-zinc-950/80 border border-white/10 rounded-[32px] shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col w-full h-full max-w-6xl max-h-[85vh] overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 blur-[100px] -mr-32 -mt-32 rounded-full" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-400/5 blur-[100px] -mr-32 -mt-32 rounded-full" />
 
         {/* Header */}
         <div className="flex items-center justify-between px-8 py-6 border-b border-white/5 bg-zinc-950/50 relative z-10">
@@ -76,7 +76,7 @@ const ImageSelectionModal = ({ isOpen, files, onConfirm, onCancel }) => {
           </div>
           <div className="flex items-center gap-4">
             <div className="px-4 py-1.5 bg-zinc-900 border border-white/5 rounded-full flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse" />
               <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">
                 {selectedPaths.size} Selected
               </span>
@@ -136,7 +136,7 @@ const ImageSelectionModal = ({ isOpen, files, onConfirm, onCancel }) => {
                   onClick={() => toggleSelection(path)}
                   className={`group cursor-pointer rounded-2xl overflow-hidden border-2 transition-all duration-300 relative aspect-square ${
                     isSelected
-                      ? "border-cyan-500 bg-cyan-500/10 shadow-[0_0_20px_rgba(6,182,212,0.15)] ring-4 ring-cyan-500/10"
+                      ? "border-yellow-400 bg-yellow-400/10 shadow-[0_0_20px_rgba(245,197,24,0.15)] ring-4 ring-yellow-400/10"
                       : "border-white/5 bg-zinc-900 hover:border-white/20 hover:scale-[1.02]"
                   }`}
                 >
@@ -153,7 +153,7 @@ const ImageSelectionModal = ({ isOpen, files, onConfirm, onCancel }) => {
                   </div>
                   
                   {isSelected && (
-                    <div className="absolute top-2 right-2 w-5 h-5 bg-cyan-500 rounded-full flex items-center justify-center shadow-lg shadow-black/50 animate-in zoom-in-50">
+                    <div className="absolute top-2 right-2 w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg shadow-black/50 animate-in zoom-in-50">
                        <span className="text-[10px] text-black font-black">✓</span>
                     </div>
                   )}
@@ -161,7 +161,7 @@ const ImageSelectionModal = ({ isOpen, files, onConfirm, onCancel }) => {
                   <div
                     className={`absolute bottom-0 left-0 right-0 px-3 py-2 text-[9px] font-bold truncate text-center backdrop-blur-md transition-colors ${
                       isSelected
-                        ? "text-cyan-400 bg-cyan-950/80"
+                        ? "text-yellow-300 bg-yellow-950/80"
                         : "text-zinc-500 bg-black/60 group-hover:bg-black/80 group-hover:text-zinc-300"
                     }`}
                   >

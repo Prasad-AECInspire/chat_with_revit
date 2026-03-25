@@ -13,10 +13,10 @@ const TestingSection = ({ onBackToEditor }) => {
   const [apiHealth, setApiHealth] = useState(null);
 
   // ── Shared Tailwind class helpers ──────────────────────────
-  const btn = "inline-flex items-center gap-1.5 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-400 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
-  const btnPrimary = "inline-flex items-center gap-1.5 px-4 py-2 bg-cyan-500 hover:bg-cyan-400 border border-transparent text-black rounded-xl text-xs font-bold transition-all cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.2)] active:scale-95 disabled:opacity-30";
+  const btn = "inline-flex items-center gap-1.5 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-yellow-400/50 text-zinc-300 hover:text-yellow-300 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
+  const btnPrimary = "inline-flex items-center gap-1.5 px-4 py-2 bg-yellow-400 hover:bg-yellow-300 border border-transparent text-black rounded-xl text-xs font-bold transition-all cursor-pointer shadow-[0_0_20px_rgba(245,197,24,0.2)] active:scale-95 disabled:opacity-30";
   const cardCls = "bg-zinc-950/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl hover:border-white/20 transition-all group";
-  const inputCls = "bg-zinc-900 border border-white/10 focus:border-cyan-500/50 focus:ring-4 focus:ring-cyan-500/10 rounded-xl px-4 py-2.5 text-xs text-zinc-100 placeholder-zinc-600 outline-none transition-all w-full shadow-inner";
+  const inputCls = "bg-zinc-900 border border-white/10 focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-400/10 rounded-xl px-4 py-2.5 text-xs text-zinc-100 placeholder-zinc-600 outline-none transition-all w-full shadow-inner";
   const labelCls = "block text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 mb-3 ml-1";
 
   useEffect(() => {
@@ -117,9 +117,9 @@ const TestingSection = ({ onBackToEditor }) => {
       <div className="max-w-5xl mx-auto w-full space-y-8 pb-12">
         {/* Header */}
         <header className="flex items-center justify-between bg-zinc-950/50 backdrop-blur-xl border border-white/10 p-8 rounded-[32px] shadow-2xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 blur-[100px] -mr-32 -mt-32 rounded-full transition-all group-hover:bg-cyan-500/10" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-400/5 blur-[100px] -mr-32 -mt-32 rounded-full transition-all group-hover:bg-yellow-400/10" />
           <div className="relative z-10 flex items-center gap-6">
-            <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-lg shadow-cyan-500/5">
+            <div className="w-16 h-16 rounded-2xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-300 shadow-lg shadow-yellow-400/5">
               <span className="text-3xl">🧪</span>
             </div>
             <div>
@@ -166,14 +166,14 @@ const TestingSection = ({ onBackToEditor }) => {
                   accept="image/*,.txt"
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                 />
-                <div className="p-6 bg-zinc-900 border-2 border-dashed border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 group-hover/upload:border-cyan-500/30 group-hover/upload:bg-cyan-500/5 transition-all duration-300">
-                   <div className="text-zinc-500 group-hover/upload:text-cyan-400 transition-colors">📄</div>
+                <div className="p-6 bg-zinc-900 border-2 border-dashed border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 group-hover/upload:border-yellow-400/30 group-hover/upload:bg-yellow-400/5 transition-all duration-300">
+                   <div className="text-zinc-500 group-hover/upload:text-yellow-300 transition-colors">📄</div>
                    <span className="text-[10px] font-black uppercase text-zinc-600 tracking-widest">Select Diagnostics Payload</span>
                 </div>
               </div>
               
               {uploadFile && (
-                <div className="p-4 bg-cyan-500/5 border border-cyan-500/10 rounded-xl text-[10px] font-mono text-cyan-500/80 animate-in slide-in-from-top-2">
+                <div className="p-4 bg-yellow-400/5 border border-yellow-400/10 rounded-xl text-[10px] font-mono text-yellow-400/80 animate-in slide-in-from-top-2">
                    {uploadFile.name} ({(uploadFile.size / 1024).toFixed(2)} KB)
                 </div>
               )}
@@ -221,7 +221,7 @@ const TestingSection = ({ onBackToEditor }) => {
                   <button 
                     onClick={loadManifest} 
                     disabled={loading} 
-                    className={`${btn} justify-center py-3 border-cyan-500/20 text-cyan-400 hover:bg-cyan-500/5`}
+                    className={`${btn} justify-center py-3 border-yellow-400/20 text-yellow-300 hover:bg-yellow-400/5`}
                   >
                     Fetch Remote Manifest
                   </button>
@@ -262,7 +262,7 @@ const TestingSection = ({ onBackToEditor }) => {
                  </thead>
                  <tbody className="divide-y divide-white/5">
                    {manifest.files.slice(0, 10).map((file, idx) => (
-                     <tr key={idx} className="hover:bg-cyan-500/5 transition-colors">
+                     <tr key={idx} className="hover:bg-yellow-400/5 transition-colors">
                        <td className="px-6 py-4 text-xs font-bold text-zinc-200">{file.fileName}</td>
                        <td className="px-6 py-4">
                           <span className="px-2 py-0.5 rounded-full bg-zinc-900 border border-white/10 text-[9px] font-black uppercase tracking-tighter text-zinc-500">
@@ -297,7 +297,7 @@ const TestingSection = ({ onBackToEditor }) => {
         {/* Instructions */}
         <section className="p-8 bg-zinc-950/80 border border-white/5 rounded-[32px] shadow-2xl">
           <h4 className="text-xs font-bold text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-            <span className="text-cyan-400">📋</span> 
+            <span className="text-yellow-300">📋</span> 
             Operational Guidelines
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
@@ -309,7 +309,7 @@ const TestingSection = ({ onBackToEditor }) => {
                "Monitor telemetry and persistence logs for cache invalidation"
              ].map((instr, i) => (
                <div key={instr} className="flex gap-4 group/item">
-                  <span className="text-[10px] font-black text-cyan-500/40 group-hover/item:text-cyan-400 transition-colors">0{i+1}</span>
+                  <span className="text-[10px] font-black text-yellow-400/40 group-hover/item:text-yellow-300 transition-colors">0{i+1}</span>
                   <p className="text-xs text-zinc-500 font-medium leading-relaxed">{instr}</p>
                </div>
              ))}

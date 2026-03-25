@@ -309,10 +309,10 @@ const ImageAugmentationTool = () => {
   };
 
   // ── Shared Tailwind class helpers ──────────────────────────
-  const btn = "inline-flex items-center gap-1.5 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-400 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
-  const btnPrimary = "inline-flex items-center gap-1.5 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 border border-transparent text-black rounded-xl text-sm font-bold transition-all cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.3)] active:scale-95 disabled:opacity-30";
+  const btn = "inline-flex items-center gap-1.5 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-yellow-400/50 text-zinc-300 hover:text-yellow-300 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
+  const btnPrimary = "inline-flex items-center gap-1.5 px-6 py-3 bg-yellow-400 hover:bg-yellow-300 border border-transparent text-black rounded-xl text-sm font-bold transition-all cursor-pointer shadow-[0_0_20px_rgba(245,197,24,0.3)] active:scale-95 disabled:opacity-30";
   const cardCls = "bg-zinc-950/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl hover:border-white/20 transition-all group";
-  const inputCls = "bg-zinc-900 border border-white/10 focus:border-cyan-500/50 focus:ring-4 focus:ring-cyan-500/10 rounded-xl px-4 py-2 text-xs text-zinc-100 placeholder-zinc-600 outline-none transition-all w-full";
+  const inputCls = "bg-zinc-900 border border-white/10 focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-400/10 rounded-xl px-4 py-2 text-xs text-zinc-100 placeholder-zinc-600 outline-none transition-all w-full";
   const labelCls = "block text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 mb-3 ml-1";
 
   return (
@@ -320,9 +320,9 @@ const ImageAugmentationTool = () => {
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-zinc-950/50 backdrop-blur-xl border border-white/10 p-8 rounded-[32px] shadow-2xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 blur-[100px] -mr-32 -mt-32 rounded-full transition-all group-hover:bg-cyan-500/10" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-400/5 blur-[100px] -mr-32 -mt-32 rounded-full transition-all group-hover:bg-yellow-400/10" />
           <div className="relative z-10 flex items-center gap-6">
-            <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-lg shadow-cyan-500/5">
+            <div className="w-16 h-16 rounded-2xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-300 shadow-lg shadow-yellow-400/5">
               <Zap className="w-8 h-8" />
             </div>
             <div>
@@ -349,7 +349,7 @@ const ImageAugmentationTool = () => {
           <aside className="lg:col-span-4 space-y-6">
             <div className={cardCls}>
               <div className="flex items-center gap-3 mb-6">
-                <Sliders className="w-4 h-4 text-cyan-400" />
+                <Sliders className="w-4 h-4 text-yellow-300" />
                 <h2 className="text-xs font-bold text-white uppercase tracking-[0.2em]">Augmentation Suite</h2>
               </div>
 
@@ -365,12 +365,12 @@ const ImageAugmentationTool = () => {
                       type="checkbox"
                       checked={config[opt.id]}
                       onChange={(e) => setConfig({ ...config, [opt.id]: e.target.checked })}
-                      className="mt-1 w-4 h-4 border-2 border-white/10 rounded bg-zinc-950 checked:bg-cyan-500 checked:border-cyan-500 transition-all cursor-pointer"
+                      className="mt-1 w-4 h-4 border-2 border-white/10 rounded bg-zinc-950 checked:bg-yellow-400 checked:border-yellow-400 transition-all cursor-pointer"
                     />
                     <div className="flex-1">
                        <div className="flex items-center gap-2 mb-0.5">
                          <opt.icon className={`w-3 h-3 ${opt.color}`} />
-                         <span className="text-xs font-bold text-white group-hover/opt:text-cyan-400 transition-colors">{opt.label}</span>
+                         <span className="text-xs font-bold text-white group-hover/opt:text-yellow-300 transition-colors">{opt.label}</span>
                        </div>
                        <p className="text-[10px] text-zinc-500 font-medium leading-relaxed">{opt.sub}</p>
                     </div>
@@ -378,13 +378,13 @@ const ImageAugmentationTool = () => {
                 ))}
 
                 {/* Custom Rotation Toggle */}
-                <div className={`p-4 rounded-2xl border transition-all ${config.enableCustomRotation ? 'bg-cyan-500/5 border-cyan-500/20' : 'bg-zinc-900/50 border-white/5 opacity-60'}`}>
+                <div className={`p-4 rounded-2xl border transition-all ${config.enableCustomRotation ? 'bg-yellow-400/5 border-yellow-400/20' : 'bg-zinc-900/50 border-white/5 opacity-60'}`}>
                   <label className="flex items-center gap-4 cursor-pointer mb-3">
                     <input
                       type="checkbox"
                       checked={config.enableCustomRotation}
                       onChange={(e) => setConfig({ ...config, enableCustomRotation: e.target.checked })}
-                      className="w-4 h-4 border-2 border-white/10 rounded bg-zinc-950 checked:bg-cyan-500 checked:border-cyan-500 transition-all cursor-pointer"
+                      className="w-4 h-4 border-2 border-white/10 rounded bg-zinc-950 checked:bg-yellow-400 checked:border-yellow-400 transition-all cursor-pointer"
                     />
                     <span className="text-xs font-bold text-white">Advanced Angle Set</span>
                   </label>
@@ -410,7 +410,7 @@ const ImageAugmentationTool = () => {
               </div>
 
               {/* Data Multiplier Summary */}
-              <div className="mt-8 relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 p-6 shadow-xl group/mult">
+              <div className="mt-8 relative overflow-hidden rounded-2xl bg-gradient-to-br from-yellow-400 to-blue-600 p-6 shadow-xl group/mult">
                 <div className="absolute -right-4 -bottom-4 text-white/10 grayscale">
                     <Zap className="w-24 h-24 rotate-12 transition-transform group-hover/mult:scale-110" />
                 </div>
@@ -444,7 +444,7 @@ const ImageAugmentationTool = () => {
                 onClick={() => fileInputRef.current?.click()}
                 className="w-full py-20 flex flex-col items-center justify-center gap-4 hover:bg-white/[0.02] transition-colors group/upload relative"
               >
-                <div className="w-20 h-20 rounded-[28px] bg-zinc-900 border border-white/5 flex items-center justify-center text-zinc-500 group-hover/upload:text-cyan-400 group-hover/upload:border-cyan-500/30 group-hover/upload:bg-cyan-500/5 transition-all duration-500">
+                <div className="w-20 h-20 rounded-[28px] bg-zinc-900 border border-white/5 flex items-center justify-center text-zinc-500 group-hover/upload:text-yellow-300 group-hover/upload:border-yellow-400/30 group-hover/upload:bg-yellow-400/5 transition-all duration-500">
                   <Upload className="w-8 h-8 group-hover/upload:-translate-y-1 transition-transform" />
                 </div>
                 <div className="text-center">
@@ -490,11 +490,11 @@ const ImageAugmentationTool = () => {
                   <div className="space-y-3 p-6 bg-zinc-900/50 border border-white/5 rounded-2xl shadow-inner">
                     <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-zinc-500">
                       <span>Neural Processing Pipeline</span>
-                      <span className="text-cyan-500">{Math.round(progress)}%</span>
+                      <span className="text-yellow-400">{Math.round(progress)}%</span>
                     </div>
                     <div className="bg-black/50 rounded-full h-2 overflow-hidden overflow-hidden ring-1 ring-white/5">
                       <div
-                        className="bg-gradient-to-r from-cyan-600 to-blue-500 h-full transition-all duration-300 rounded-full shadow-[0_0_10px_rgba(6,182,212,0.5)]"
+                        className="bg-gradient-to-r from-yellow-500 to-blue-500 h-full transition-all duration-300 rounded-full shadow-[0_0_10px_rgba(245,197,24,0.5)]"
                         style={{ width: `${progress}%` }}
                       />
                     </div>
@@ -520,7 +520,7 @@ const ImageAugmentationTool = () => {
                   {augmentedImages.slice(0, 12).map((img, idx) => (
                     <div
                       key={idx}
-                      className="relative group aspect-square rounded-2xl overflow-hidden bg-black border border-white/5 shadow-lg group-hover:border-cyan-500/30 transition-all duration-500"
+                      className="relative group aspect-square rounded-2xl overflow-hidden bg-black border border-white/5 shadow-lg group-hover:border-yellow-400/30 transition-all duration-500"
                     >
                       <img
                         src={img.data}
@@ -528,7 +528,7 @@ const ImageAugmentationTool = () => {
                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
                       />
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                         <span className="text-[10px] font-black text-white uppercase tracking-widest bg-cyan-500/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-cyan-500/30">
+                         <span className="text-[10px] font-black text-white uppercase tracking-widest bg-yellow-400/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-yellow-400/30">
                            {img.label}
                          </span>
                       </div>

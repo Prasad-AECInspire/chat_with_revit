@@ -14,10 +14,10 @@ const Dashboard = ({
   const { showNotification } = useNotification();
 
   // ── Shared Tailwind class helpers ──────────────────────────
-  const btn = "inline-flex items-center gap-1.5 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-400 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
-  const btnPrimary = "inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 border border-cyan-400/20 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-[0_4px_20px_rgba(6,182,212,0.25)] active:scale-95";
-  const cardCls = "bg-zinc-900/40 backdrop-blur-xl border border-white/5 rounded-2xl p-6 shadow-2xl hover:border-cyan-500/20 transition-all group relative overflow-hidden";
-  const inputCls = "bg-zinc-950/50 border border-white/5 focus:border-cyan-500/50 focus:ring-4 focus:ring-cyan-500/10 rounded-xl px-4 py-2.5 text-xs text-zinc-100 placeholder-zinc-600 outline-none transition-all w-full backdrop-blur-md";
+  const btn = "inline-flex items-center gap-1.5 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-yellow-400/50 text-zinc-300 hover:text-yellow-300 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
+  const btnPrimary = "inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 border border-yellow-300/20 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-[0_4px_20px_rgba(245,197,24,0.25)] active:scale-95";
+  const cardCls = "bg-zinc-900/40 backdrop-blur-xl border border-white/5 rounded-2xl p-6 shadow-2xl hover:border-yellow-400/20 transition-all group relative overflow-hidden";
+  const inputCls = "bg-zinc-950/50 border border-white/5 focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-400/10 rounded-xl px-4 py-2.5 text-xs text-zinc-100 placeholder-zinc-600 outline-none transition-all w-full backdrop-blur-md";
   const labelCls = "block text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 mb-3 ml-1 opacity-80";
   const formGroup = "mb-6";
 
@@ -1224,9 +1224,9 @@ const Dashboard = ({
     <div className="flex flex-col h-screen bg-black text-zinc-100 font-sans overflow-hidden animate-in">
       {/* ── Header ── */}
       <header className="flex items-center justify-between px-6 h-[64px] flex-shrink-0 bg-zinc-950/50 backdrop-blur-xl border-b border-white/10 relative z-50">
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent" />
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-lg shadow-cyan-500/5">
+          <div className="w-10 h-10 rounded-xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-300 shadow-lg shadow-yellow-400/5">
             <span className="text-xl"></span>
           </div>
           <div>
@@ -1279,7 +1279,7 @@ const Dashboard = ({
               <div className="space-y-4">
                 <div className="bg-zinc-900/30 border border-white/5 rounded-2xl p-5 space-y-4">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-cyan-400">🔗</span>
+                    <span className="text-yellow-300">🔗</span>
                     <h4 className="text-xs font-bold text-white uppercase tracking-wider">Merge Classes</h4>
                   </div>
                   <div className="space-y-3">
@@ -1299,7 +1299,7 @@ const Dashboard = ({
 
                 <div className="bg-zinc-900/30 border border-white/5 rounded-2xl p-5 space-y-4">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-cyan-400">✏️</span>
+                    <span className="text-yellow-300">✏️</span>
                     <h4 className="text-xs font-bold text-white uppercase tracking-wider">Rename Class</h4>
                   </div>
                   <div className="space-y-3">
@@ -1351,7 +1351,7 @@ const Dashboard = ({
                 {classStats.sort((a, b) => b.count - a.count).map((stat) => (
                   <div key={stat.id} className={cardCls}>
                     <div className="flex items-start justify-between mb-6">
-                      <div className="bg-zinc-900/50 p-2 rounded-xl group-hover:bg-cyan-500/10 border border-white/5 transition-colors overflow-hidden">
+                      <div className="bg-zinc-900/50 p-2 rounded-xl group-hover:bg-yellow-400/10 border border-white/5 transition-colors overflow-hidden">
                         {classPreviewThumbnails[stat.id] ? (
                           <img src={classPreviewThumbnails[stat.id]} alt={stat.name} className="w-12 h-12 rounded-lg object-cover p-2" />
                         ) : (
@@ -1367,7 +1367,7 @@ const Dashboard = ({
                     <div className="space-y-4">
                       <h3 className="text-sm font-bold text-zinc-200 truncate">{stat.name}</h3>
                       <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden">
-                        <div className="h-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-all duration-1000"
+                        <div className="h-full bg-yellow-400 shadow-[0_0_10px_rgba(245,197,24,0.5)] transition-all duration-1000"
                           style={{ width: `${stat.percentage}%` }} />
                       </div>
                       <div className="flex gap-2">
@@ -1412,7 +1412,7 @@ const Dashboard = ({
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div className="h-1 w-24 bg-zinc-900 rounded-full overflow-hidden">
-                              <div className="h-full bg-cyan-500/50" style={{ width: `${stat.percentage}%` }} />
+                              <div className="h-full bg-yellow-400/50" style={{ width: `${stat.percentage}%` }} />
                             </div>
                             <span className="text-[10px] text-zinc-600">{stat.percentage}%</span>
                           </div>
@@ -1443,7 +1443,7 @@ const Dashboard = ({
             {/* Modal Header */}
             <header className="flex items-center justify-between px-8 py-6 border-b border-white/10 bg-zinc-950/50 backdrop-blur-md sticky top-0 z-20">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-2xl shadow-inner">📸</div>
+                <div className="w-12 h-12 rounded-2xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-2xl shadow-inner">📸</div>
                 <div>
                   <h2 className="text-xl font-bold tracking-tight text-white leading-none mb-1.5">Annotation Crops: {selectedClassForCrops?.name}</h2>
                   <p className="text-xs text-zinc-500 font-medium">Verify and manage individual labels for this class</p>
@@ -1458,7 +1458,7 @@ const Dashboard = ({
               <div className="flex-1 flex flex-col min-w-0">
                 {/* Sub-Header: Controls */}
                 <div className="px-8 py-4 bg-zinc-900/30 border-b border-white/5 flex flex-wrap items-center gap-4">
-                  <button className={`${btn} ${isSelectionMode ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-400" : ""}`} onClick={toggleSelectionMode}>
+                  <button className={`${btn} ${isSelectionMode ? "bg-yellow-400/20 border-yellow-400/50 text-yellow-300" : ""}`} onClick={toggleSelectionMode}>
                     {isSelectionMode ? "✓ Selection Mode ON" : "Enable Multi-Select"}
                   </button>
 
@@ -1467,7 +1467,7 @@ const Dashboard = ({
                       <button className={btn} onClick={selectAllOnPage}>Select All Page</button>
                       <button className={btn} onClick={deselectAll}>Deselect</button>
                       <div className="w-px h-4 bg-white/10 mx-2" />
-                      <span className="text-xs font-bold text-cyan-500">{selectedLabels.size} selected</span>
+                      <span className="text-xs font-bold text-yellow-400">{selectedLabels.size} selected</span>
 
                       {selectedLabels.size > 0 && (
                         <div className="flex items-center gap-3 ml-4 pl-4 border-l border-white/10">
@@ -1504,12 +1504,12 @@ const Dashboard = ({
                     {classCrops.map((crop) => {
                       const isSelected = selectedLabels.has(crop.id);
                       return (
-                        <div key={crop.id} className={`group relative rounded-2xl overflow-hidden border transition-all duration-300 ${isSelected ? "border-cyan-500 ring-2 ring-cyan-500/20 bg-cyan-500/5 shadow-2xl" : "border-white/5 bg-zinc-900 shadow-lg hover:border-white/20"
+                        <div key={crop.id} className={`group relative rounded-2xl overflow-hidden border transition-all duration-300 ${isSelected ? "border-yellow-400 ring-2 ring-yellow-400/20 bg-yellow-400/5 shadow-2xl" : "border-white/5 bg-zinc-900 shadow-lg hover:border-white/20"
                           }`}>
                           {/* Overlay Checkbox */}
                           {isSelectionMode && (
                             <div className="absolute top-3 left-3 z-10">
-                              <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${isSelected ? "bg-cyan-500 border-cyan-500" : "bg-black/30 border-white/20"
+                              <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${isSelected ? "bg-yellow-400 border-yellow-400" : "bg-black/30 border-white/20"
                                 }`} onClick={() => toggleCropSelection(crop.id)}>
                                 {isSelected && <span className="text-white text-[10px]">✓</span>}
                               </div>
@@ -1528,7 +1528,7 @@ const Dashboard = ({
 
                             {!isSelectionMode && (
                               <div className="flex items-center gap-2">
-                                <select className="flex-1 bg-zinc-900 border border-white/10 rounded-lg py-1 px-2 text-[10px] text-zinc-300 outline-none focus:border-cyan-500/50"
+                                <select className="flex-1 bg-zinc-900 border border-white/10 rounded-lg py-1 px-2 text-[10px] text-zinc-300 outline-none focus:border-yellow-400/50"
                                   value={crop.annotation.classId} onChange={(e) => changeAnnotationClass(crop.imageIndex, crop.annotationIndex, e.target.value)}>
                                   {classes.map((cls, idx) => <option key={idx} value={idx}>{cls}</option>)}
                                 </select>
@@ -1554,7 +1554,7 @@ const Dashboard = ({
                   {classes.map((cls, idx) => (
                     <div key={idx} onClick={() => viewClassCrops(idx, cls)}
                       className={`group flex items-center gap-3 p-3 rounded-2xl border transition-all cursor-pointer ${selectedClassForCrops?.name === cls
-                          ? "bg-cyan-500/10 border-cyan-500/30 ring-1 ring-cyan-500/20"
+                          ? "bg-yellow-400/10 border-yellow-400/30 ring-1 ring-yellow-400/20"
                           : "bg-transparent border-transparent hover:bg-white/5"
                         }`}>
                       <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-white/5 overflow-hidden flex-shrink-0 flex items-center justify-center">
@@ -1565,7 +1565,7 @@ const Dashboard = ({
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`text-[11px] font-bold truncate ${selectedClassForCrops?.name === cls ? "text-cyan-400" : "text-zinc-400 group-hover:text-zinc-200"}`}>
+                        <p className={`text-[11px] font-bold truncate ${selectedClassForCrops?.name === cls ? "text-yellow-300" : "text-zinc-400 group-hover:text-zinc-200"}`}>
                           {cls}
                         </p>
                         <p className="text-[10px] text-zinc-600 font-mono">#{idx.toString().padStart(2, '0')}</p>
@@ -1593,7 +1593,7 @@ const Dashboard = ({
 
             <header className="flex items-center justify-between px-8 py-6 border-b border-white/10 bg-zinc-950/50 backdrop-blur-md sticky top-0 z-20">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-2xl shadow-inner">📜</div>
+                <div className="w-12 h-12 rounded-2xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-2xl shadow-inner">📜</div>
                 <div>
                   <h2 className="text-xl font-bold tracking-tight text-white leading-none mb-1.5">Dataset Health Report</h2>
                   <p className="text-xs text-zinc-500 font-medium">Detailed metrics per classification unit</p>
@@ -1626,7 +1626,7 @@ const Dashboard = ({
                           <p className="text-[10px] text-zinc-500 font-mono italic">Seen in {stat.imageCount} images</p>
                         </td>
                         <td className="px-6 py-4 text-center text-xs font-semibold text-zinc-300">{stat.annotationCount}</td>
-                        <td className="px-6 py-4 text-center text-xs font-mono text-cyan-500">{stat.density} <span className="text-[10px] text-zinc-600">avg</span></td>
+                        <td className="px-6 py-4 text-center text-xs font-mono text-yellow-400">{stat.density} <span className="text-[10px] text-zinc-600">avg</span></td>
                         <td className="px-6 py-4 text-center">
                           {stat.annotationCount === 0 ? (
                             <span className="px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-[10px] text-red-500 font-bold uppercase tracking-tight">Empty</span>
@@ -1675,7 +1675,7 @@ const Dashboard = ({
               {/* Left: The Subject */}
               <div className="w-[400px] p-10 border-r border-white/10 flex flex-col items-center justify-center bg-zinc-950/50">
                 <div className="relative group">
-                  <div className="absolute -inset-4 bg-cyan-500/20 rounded-[40px] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute -inset-4 bg-yellow-400/20 rounded-[40px] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
                   <img src={smartSortCurrentCrop.cropSrc} alt="Subject" className="relative h-48 w-48 object-contain rounded-3xl border-4 border-white/10 shadow-2xl bg-black" />
                 </div>
 

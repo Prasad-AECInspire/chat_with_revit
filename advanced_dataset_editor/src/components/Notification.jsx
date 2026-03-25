@@ -23,7 +23,7 @@ const Notification = ({ id, message, type, duration, onClose }) => {
     success: { border: "border-emerald-500/50", text: "text-emerald-400", bg: "bg-emerald-500/5", iconBg: "bg-emerald-500/20" },
     error: { border: "border-red-500/50", text: "text-red-400", bg: "bg-red-500/5", iconBg: "bg-red-500/20" },
     warning: { border: "border-amber-500/50", text: "text-amber-400", bg: "bg-amber-500/5", iconBg: "bg-amber-500/20" },
-    info: { border: "border-cyan-500/50", text: "text-cyan-400", bg: "bg-cyan-500/5", iconBg: "bg-cyan-500/20" }
+    info: { border: "border-yellow-400/50", text: "text-yellow-300", bg: "bg-yellow-400/5", iconBg: "bg-yellow-400/20" }
   };
 
   const config = statusConfig[type] || statusConfig.info;

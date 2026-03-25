@@ -74,10 +74,10 @@ const DatasetMonitor = ({
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // ── Shared Tailwind class helpers ──────────────────────────
-  const btn = "inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-400 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed active:scale-95";
+  const btn = "inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-yellow-400/50 text-zinc-300 hover:text-yellow-300 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed active:scale-95";
   const cardCls = "bg-zinc-900/30 backdrop-blur-sm border border-white/5 rounded-2xl p-5 shadow-inner transition-all";
   const labelCls = "text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1 block mb-2";
-  const selectCls = "w-full bg-zinc-900/80 border border-white/5 rounded-xl px-4 py-3 text-xs text-zinc-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all appearance-none cursor-pointer";
+  const selectCls = "w-full bg-zinc-900/80 border border-white/5 rounded-xl px-4 py-3 text-xs text-zinc-200 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all appearance-none cursor-pointer";
 
   return (
     <div className="min-h-screen bg-black text-zinc-100 font-sans flex flex-col overflow-hidden animate-in">
@@ -85,7 +85,7 @@ const DatasetMonitor = ({
       {/* ── Top Navigation ── */}
       <header className="h-20 flex-shrink-0 border-b border-white/10 bg-zinc-950/50 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-50">
         <div className="flex items-center gap-5">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-xl shadow-inner">🔍</div>
+          <div className="w-10 h-10 rounded-xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-xl shadow-inner">🔍</div>
           <div>
             <h1 className="text-lg font-black tracking-tighter text-white leading-none mb-1">Dataset Monitor</h1>
             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Visual Inspection Engine</p>
@@ -144,7 +144,7 @@ const DatasetMonitor = ({
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </div>
                 </div>
-                <p className="text-[10px] text-cyan-500 font-mono italic px-1">Retrieved {filteredImages.length} matches</p>
+                <p className="text-[10px] text-yellow-400 font-mono italic px-1">Retrieved {filteredImages.length} matches</p>
              </div>
           </section>
 
@@ -165,7 +165,7 @@ const DatasetMonitor = ({
                    </div>
                    <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden border border-white/5">
                      <div 
-                        className="h-full rounded-full transition-all duration-700 ease-out shadow-[0_0_8px_rgba(6,182,212,0.3)]"
+                        className="h-full rounded-full transition-all duration-700 ease-out shadow-[0_0_8px_rgba(245,197,24,0.3)]"
                         style={{ 
                           backgroundColor: `hsl(${index * 40}, 60%, 50%)`,
                           width: `${percentage}%` 
@@ -193,7 +193,7 @@ const DatasetMonitor = ({
                     </div>
                     <div className="bg-black/40 rounded-xl p-2.5 border border-white/5">
                        <p className="text-[9px] text-zinc-600 font-bold uppercase mb-1">Filtered</p>
-                       <p className="text-xs font-mono font-bold text-cyan-500">{filteredImages.length}</p>
+                       <p className="text-xs font-mono font-bold text-yellow-400">{filteredImages.length}</p>
                     </div>
                  </div>
               </div>
@@ -245,12 +245,12 @@ const DatasetMonitor = ({
                        onClick={() => handleImageClick(globalIndex, image)}
                        className="group cursor-pointer"
                      >
-                       <div className="relative aspect-square bg-zinc-900 rounded-[24px] overflow-hidden border border-white/5 group-hover:border-cyan-500/30 transition-all shadow-xl">
+                       <div className="relative aspect-square bg-zinc-900 rounded-[24px] overflow-hidden border border-white/5 group-hover:border-yellow-400/30 transition-all shadow-xl">
                          <img src={image.src} alt={image.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                          
                          {/* Annotation Indicator */}
-                         <div className="absolute top-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-white/10 text-[9px] font-black text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                         <div className="absolute top-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-white/10 text-[9px] font-black text-yellow-300 opacity-0 group-hover:opacity-100 transition-opacity">
                            {annotationCount} ANNS
                          </div>
                        </div>
@@ -291,7 +291,7 @@ const DatasetMonitor = ({
                    
                    <div className="flex items-center gap-1.5">
                       <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Page</span>
-                      <div className="px-3 py-1 bg-white/5 rounded-lg border border-white/10 text-xs font-mono font-bold text-cyan-500">{currentPage}</div>
+                      <div className="px-3 py-1 bg-white/5 rounded-lg border border-white/10 text-xs font-mono font-bold text-yellow-400">{currentPage}</div>
                       <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">of {totalPages}</span>
                    </div>
 
@@ -312,7 +312,7 @@ const DatasetMonitor = ({
       <footer className="h-10 flex-shrink-0 bg-zinc-950 border-t border-white/5 px-8 flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-zinc-600">
          <div className="flex items-center gap-6">
            <span className="flex items-center gap-1.5">
-             <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/50 shadow-[0_0_8px_rgba(6,182,212,0.5)]" /> 
+             <div className="w-1.5 h-1.5 rounded-full bg-yellow-400/50 shadow-[0_0_8px_rgba(245,197,24,0.5)]" /> 
              Inspector Mode: {selectedSplit}
            </span>
          </div>

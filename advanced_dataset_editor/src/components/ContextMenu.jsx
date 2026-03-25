@@ -39,7 +39,7 @@ const ContextMenu = ({ x, y, visible, onClose, options, annotation }) => {
               ${
                 option.disabled
                   ? "text-zinc-600 cursor-not-allowed opacity-50"
-                  : "text-zinc-400 hover:bg-cyan-500/10 hover:text-cyan-400 cursor-pointer active:bg-cyan-500/20"
+                  : "text-zinc-400 hover:bg-yellow-400/10 hover:text-yellow-300 cursor-pointer active:bg-yellow-400/20"
               }`}
           >
             {option.icon && (

@@ -603,10 +603,10 @@ export default function CopyPasteAugmentationApp({ setCurrentView, images: propI
   }, [currentImageIndex, images, labels, processedImages, processedLabels, previewMode]);
 
   // ── Shared Tailwind class helpers ──────────────────────────
-  const btn = "inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-400 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
-  const btnPrimary = "inline-flex items-center gap-2 px-5 py-2.5 bg-cyan-500 hover:bg-cyan-400 border border-transparent text-black rounded-xl text-xs font-black transition-all cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.3)] active:scale-95 uppercase tracking-widest";
+  const btn = "inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-yellow-400/50 text-zinc-300 hover:text-yellow-300 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
+  const btnPrimary = "inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-400 hover:bg-yellow-300 border border-transparent text-black rounded-xl text-xs font-black transition-all cursor-pointer shadow-[0_0_20px_rgba(245,197,24,0.3)] active:scale-95 uppercase tracking-widest";
   const cardCls = "bg-zinc-900/40 backdrop-blur-xl border border-white/5 rounded-3xl p-6 shadow-2xl transition-all";
-  const inputCls = "bg-zinc-900 border border-white/5 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all";
+  const inputCls = "bg-zinc-900 border border-white/5 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all";
   const labelCls = "text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1 block mb-2";
 
   return (
@@ -633,7 +633,7 @@ export default function CopyPasteAugmentationApp({ setCurrentView, images: propI
           {/* Transformation Controls */}
           <section className={cardCls}>
             <div className="flex items-center gap-2 mb-6">
-              <Settings size={16} className="text-cyan-500" />
+              <Settings size={16} className="text-yellow-400" />
               <h3 className="text-[10px] font-bold text-zinc-200 uppercase tracking-widest leading-none">Global Processing</h3>
             </div>
             
@@ -643,7 +643,7 @@ export default function CopyPasteAugmentationApp({ setCurrentView, images: propI
                   type="checkbox"
                   checked={enableFeathering}
                   onChange={(e) => setEnableFeathering(e.target.checked)}
-                  className="w-4 h-4 rounded border-white/10 bg-black text-cyan-500 focus:ring-offset-black"
+                  className="w-4 h-4 rounded border-white/10 bg-black text-yellow-400 focus:ring-offset-black"
                 />
                 <div>
                    <p className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors">Edge Feathering</p>
@@ -656,7 +656,7 @@ export default function CopyPasteAugmentationApp({ setCurrentView, images: propI
                   type="checkbox"
                   checked={enableBrightness}
                   onChange={(e) => setEnableBrightness(e.target.checked)}
-                  className="w-4 h-4 rounded border-white/10 bg-black text-cyan-500 focus:ring-offset-black"
+                  className="w-4 h-4 rounded border-white/10 bg-black text-yellow-400 focus:ring-offset-black"
                 />
                 <div>
                    <p className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors">Brightness Jitter</p>
@@ -675,9 +675,9 @@ export default function CopyPasteAugmentationApp({ setCurrentView, images: propI
                     type="number"
                     value={globalTargetInput}
                     onChange={(e) => setGlobalTargetInput(parseInt(e.target.value))}
-                    className="w-16 bg-zinc-900 border border-white/5 rounded-lg px-2 py-1 text-[10px] font-mono text-cyan-500 focus:outline-none"
+                    className="w-16 bg-zinc-900 border border-white/5 rounded-lg px-2 py-1 text-[10px] font-mono text-yellow-400 focus:outline-none"
                   />
-                  <button onClick={applyGlobalTarget} className="text-[9px] font-black text-zinc-500 hover:text-cyan-500 uppercase tracking-widest transition-colors">Apply All</button>
+                  <button onClick={applyGlobalTarget} className="text-[9px] font-black text-zinc-500 hover:text-yellow-400 uppercase tracking-widest transition-colors">Apply All</button>
                </div>
             </div>
 
@@ -698,7 +698,7 @@ export default function CopyPasteAugmentationApp({ setCurrentView, images: propI
                                 return next;
                               });
                             }}
-                            className="w-4 h-4 rounded border-white/10 bg-black text-cyan-500"
+                            className="w-4 h-4 rounded border-white/10 bg-black text-yellow-400"
                           />
                       </th>
                       <th className="px-4 py-3">Symbol Class</th>
@@ -715,7 +715,7 @@ export default function CopyPasteAugmentationApp({ setCurrentView, images: propI
                         const needed = Math.max(0, settings.targetCount - currentCount);
 
                         return (
-                          <tr key={id} className={`group transition-colors ${isEditing ? "bg-cyan-500/5" : "hover:bg-white/[0.02]"}`}>
+                          <tr key={id} className={`group transition-colors ${isEditing ? "bg-yellow-400/5" : "hover:bg-white/[0.02]"}`}>
                             <td className="px-4 py-3">
                               <input
                                 type="checkbox"
@@ -726,7 +726,7 @@ export default function CopyPasteAugmentationApp({ setCurrentView, images: propI
                                     [id]: { ...prev[id], enabled: e.target.checked }
                                   }));
                                 }}
-                                className="w-4 h-4 rounded border-white/10 bg-black text-cyan-500"
+                                className="w-4 h-4 rounded border-white/10 bg-black text-yellow-400"
                               />
                             </td>
                             <td className="px-4 py-3" onClick={() => setEditingClassId(id)}>
@@ -744,7 +744,7 @@ export default function CopyPasteAugmentationApp({ setCurrentView, images: propI
                                    onChange={(e) => setEditForm({ ...editForm, targetCount: parseInt(e.target.value) })}
                                    onBlur={() => saveRow(id)}
                                    onKeyDown={(e) => e.key === 'Enter' && saveRow(id)}
-                                   className="w-16 bg-black border border-cyan-500/50 rounded-lg px-2 py-1 text-[10px] font-mono text-cyan-500 text-right focus:outline-none"
+                                   className="w-16 bg-black border border-yellow-400/50 rounded-lg px-2 py-1 text-[10px] font-mono text-yellow-400 text-right focus:outline-none"
                                    autoFocus
                                  />
                                ) : (
@@ -791,7 +791,7 @@ export default function CopyPasteAugmentationApp({ setCurrentView, images: propI
 
              {processedImages.length > 0 && (
                <div className="flex gap-3">
-                  <button onClick={downloadAugmentedDataset} className="flex-1 py-4 bg-zinc-900 hover:bg-zinc-800 text-cyan-400 font-black text-[10px] rounded-2xl transition-all shadow-xl active:scale-95 uppercase tracking-widest border border-white/5">
+                  <button onClick={downloadAugmentedDataset} className="flex-1 py-4 bg-zinc-900 hover:bg-zinc-800 text-yellow-300 font-black text-[10px] rounded-2xl transition-all shadow-xl active:scale-95 uppercase tracking-widest border border-white/5">
                     📥 DOWNLOAD (ZIP)
                   </button>
                   <button onClick={() => { setProcessedImages([]); setProcessedLabels([]); setPreviewMode('original'); }} className="px-5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-2xl border border-red-500/20 transition-all">
@@ -855,7 +855,7 @@ export default function CopyPasteAugmentationApp({ setCurrentView, images: propI
                     <button onClick={() => setTransform(t => ({ ...t, scale: Math.max(0.1, t.scale - 0.1) }))} className="p-2 hover:bg-white/5 rounded-lg text-zinc-500 transition-all">
                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
                     </button>
-                    <span className="text-[10px] font-mono font-bold text-cyan-500 w-12 text-center">{Math.round(transform.scale * 100)}%</span>
+                    <span className="text-[10px] font-mono font-bold text-yellow-400 w-12 text-center">{Math.round(transform.scale * 100)}%</span>
                     <button onClick={() => setTransform(t => ({ ...t, scale: Math.min(5, t.scale + 0.1) }))} className="p-2 hover:bg-white/5 rounded-lg text-zinc-500 transition-all">
                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                     </button>

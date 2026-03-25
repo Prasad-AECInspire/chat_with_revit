@@ -1,10 +1,6 @@
 // Tailwind + minimal CSS via index.html CDN
 import React, { useState, useRef, useEffect } from "react";
-// Add split property to manual images
-// Clock API for manual dataset
-// Verify API blocking
 
-// I want to make download zip also for this when user annote to this images
 import {
   Stage,
   Layer,
@@ -24,7 +20,6 @@ import DatasetMonitor from "./components/DatasetMonitor";
 import ContextMenu from "./components/ContextMenu";
 // import TestingSection from './TestingSection';
 import ImageCropper from "./components/ImageCropper";
-import { invoke } from "@tauri-apps/api/core";
 import LoadingProgress from "./components/LoadingProgress";
 import VirtualImageGrid from "./components/VirtualImageGrid";
 import { useMemoryMonitor, formatBytes } from "./hooks/MemoryMonitorHook.js";
@@ -150,7 +145,7 @@ const App = () => {
   // Flag to track if dataset is loaded from ZIP (prevents API calls)
   const [isZipDataset, setIsZipDataset] = useState(false);
   // Track dataset type: 'yolo' or 'segmentation' (detected on upload)
-  const [datasetType, setDatasetType] = useState(null); 
+  const [datasetType, setDatasetType] = useState(null);
 
   // Helper function to check if API calls are allowed
   const canMakeApiCall = () => {
@@ -246,7 +241,7 @@ const App = () => {
       if (key === "enter") {
         if (
           (tool === "polygon" || tool === "white-patch") &&
-          newPolygonPoints.length > 2
+          newPolygonPoints.length > 100
         ) {
           e.preventDefault();
           const newAnnotationObj = {
@@ -383,7 +378,7 @@ const App = () => {
       setImageLoadError(null);
 
       const img = new window.Image();
-      
+
       // OPTIMIZATION: Conditional crossOrigin
       // Only set for external/http URLs to avoid issues with blobs/base64
       if (currentImage.src.startsWith('http')) {
@@ -563,7 +558,6 @@ const App = () => {
   // Save annotations
 
   // Download modified dataset in YOLO format
-  // Download modified dataset in YOLO format
 
   // Function to add a new class
   const addNewClass = (className) => {
@@ -634,15 +628,15 @@ const App = () => {
 
 
   // ── Shared Tailwind class helpers ──────────────────────────
-  // ── Shared Tailwind class helpers ──────────────────────────
-  const btn = "inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-400 rounded-lg text-xs font-medium transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-sm active:scale-95";
+  const btn = "inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/5 hover:bg-yellow-400/10 border border-white/10 hover:border-yellow-400/40 text-zinc-300 hover:text-yellow-300 rounded-lg text-xs font-medium transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-sm active:scale-95";
   const btnDanger = "inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/50 text-red-400 rounded-lg text-xs font-medium transition-all cursor-pointer active:scale-95";
-  const navBtn = "px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 text-zinc-400 hover:text-zinc-200 rounded-lg text-xs transition-all disabled:opacity-30 disabled:cursor-not-allowed active:scale-95";
-  const inputCls = "w-full bg-zinc-950/50 border border-white/5 focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/10 rounded-lg px-3 py-2 text-xs text-zinc-100 placeholder-zinc-600 outline-none transition-all shadow-inner backdrop-blur-md";
-  const selectCls = "w-full bg-zinc-950/50 border border-white/5 focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/10 rounded-lg px-3 py-2 text-xs text-zinc-300 outline-none transition-all appearance-none cursor-pointer shadow-inner backdrop-blur-md";
-  const labelCls = "block text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500 mb-2 px-0.5 opacity-80";
+  const navBtn = "px-3 py-1.5 bg-white/5 hover:bg-yellow-400/10 border border-white/8 hover:border-yellow-400/30 text-zinc-400 hover:text-yellow-300 rounded-lg text-xs font-medium transition-all disabled:opacity-25 disabled:cursor-not-allowed active:scale-95";
+  const inputCls = "w-full bg-black/30 border border-white/8 focus:border-yellow-400/50 focus:ring-2 focus:ring-yellow-400/10 rounded-lg px-3 py-2 text-xs text-zinc-100 placeholder-zinc-600 outline-none transition-all shadow-inner";
+  const selectCls = "w-full bg-black/30 border border-white/8 focus:border-yellow-400/50 focus:ring-2 focus:ring-yellow-400/10 rounded-lg px-3 py-2 text-xs text-zinc-300 outline-none transition-all appearance-none cursor-pointer";
+  const labelCls = "block text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500 mb-1.5 px-0.5";
   const formGroup = "mb-4";
-  const toolBtnBase = "flex items-center gap-2.5 w-full px-3.5 py-2.5 text-xs font-medium rounded-xl border transition-all cursor-pointer text-left shadow-sm backdrop-blur-md";
+  const toolBtnBase = "flex items-center gap-2.5 w-full px-3 py-2 text-xs font-semibold rounded-xl border transition-all cursor-pointer text-left";
+  const sectionHeader = "text-[9px] font-black uppercase tracking-[0.2em] text-yellow-600/70 mb-2 flex items-center gap-2 before:flex-1 before:h-px before:bg-yellow-400/10 after:content-none";
 
   return (
 
@@ -651,38 +645,64 @@ const App = () => {
       {currentView === "editor" ? (
         <>
           {/* ── Header ── */}
-          <header className="flex items-center justify-between px-4 h-[54px] flex-shrink-0 bg-zinc-900 border-b border-white/5 relative">
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold text-lg">A</div>
-              <h1 className="font-sans text-sm font-bold tracking-tight text-white">Advanced Dataset Editor</h1>
+          <header className="flex items-center justify-between px-4 h-[52px] flex-shrink-0 bg-zinc-950/90 border-b border-yellow-400/10 relative backdrop-blur-xl z-50">
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent" />
+            {/* Logo */}
+            <div className="flex items-center gap-2.5 min-w-[160px]">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-lg shadow-yellow-400/20">
+                <span className="text-black font-black text-xs">DE</span>
+              </div>
+              <div>
+                <h1 className="text-xs font-black tracking-tight text-white leading-none">Dataset Editor</h1>
+                {dataset && <p className="text-[9px] text-yellow-600/70 font-mono mt-0.5 truncate max-w-[120px]">{dataset.name}</p>}
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              {dataset && (
-                <>
-                  <button className={btn} onClick={() => setCurrentView("dashboard")}>Dashboard</button>
-                  <button className={btn} onClick={() => setCurrentView("monitor")}>Monitor</button>
-                  <button className={btn} onClick={() => setCurrentView("augment")}>Augment</button>
-                </>
+
+            {/* Nav group */}
+            {dataset && (
+              <div className="flex items-center gap-1 bg-white/3 border border-white/6 rounded-xl px-1.5 py-1">
+                {[
+                  { id: "dashboard", label: "Dashboard", icon: "▦" },
+                  { id: "monitor", label: "Monitor", icon: "◉" },
+                  // { id: "augment", label: "Augment", icon: "⊕" },
+                ].map(({ id, label, icon }) => (
+                  <button key={id} className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all flex items-center gap-1.5 ${currentView === id ? "bg-yellow-400/15 text-yellow-300 border border-yellow-400/25" : "text-zinc-500 hover:text-zinc-200 hover:bg-white/5"}`}
+                    onClick={() => setCurrentView(id)}>
+                    <span className="opacity-60">{icon}</span>{label}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Actions group */}
+            <div className="flex items-center gap-1.5 min-w-[160px] justify-end">
+              {/* Memory pill */}
+              {memoryInfo && (
+                <div className="hidden xl:flex items-center gap-1 px-2 py-1 rounded-md bg-white/3 border border-white/5 text-[9px] font-mono text-zinc-600">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/60 inline-block" />
+                  {formatBytes(memoryInfo.usedJSHeapSize ?? 0)}
+                </div>
               )}
-              <button className={`${btn} bg-white border-transparent hover:bg-zinc-100 text-zinc-950 font-bold`} onClick={() => saveAnnotations(images, currentImageIndex, datasetSplit, modifiedImages, setModifiedImages, annotations)}>
-                Save
-              </button>
+              {/* <button
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-yellow-400/90 hover:bg-yellow-300 text-black text-xs font-black rounded-lg transition-all active:scale-95 shadow-md shadow-yellow-400/20"
+                onClick={() => saveAnnotations(images, currentImageIndex, datasetSplit, modifiedImages, setModifiedImages, annotations)}>
+                ✓ Save
+              </button> */}
               {dataset && (
-                <>
+                <div className="flex items-center gap-1">
                   <button
-                    className={`${btn} border-cyan-500/30 text-cyan-400 bg-cyan-500/10 hover:bg-cyan-500/20 ${datasetType === "segmentation" ? "opacity-30" : ""}`}
-                    title={datasetType === "segmentation" ? "Your dataset appears to be Segmentation format" : "Download as YOLO bounding box format"}
+                    className={`${btn} text-[10px] ${datasetType === "segmentation" ? "opacity-40" : ""}`}
+                    title="Download YOLO bounding box format"
                     onClick={() => downloadDataset(dataset, images, classes, setLoadingProgress, modifiedImages, datasetSplit, JSZip, loadingCancelled, datasetConfig, availableSplits, yaml)}>
-                    {datasetType === "segmentation" ? "⚠ " : ""}Download YOLO
+                    {datasetType === "segmentation" ? "⚠ " : "↓"} YOLO
                   </button>
                   <button
-                    className={`${btn} border-cyan-500/30 text-cyan-400 bg-cyan-500/10 hover:bg-cyan-500/20 ${datasetType === "yolo" ? "opacity-30" : ""}`}
-                    title={datasetType === "yolo" ? "Your dataset appears to be YOLO bounding box format" : "Download as Segmentation polygon format (images resized to 1280px)"}
+                    className={`${btn} text-[10px] ${datasetType === "yolo" ? "opacity-40" : ""}`}
+                    title="Download Segmentation polygon format"
                     onClick={() => downloadSegmentationDataset(dataset, images, classes, setLoadingProgress, modifiedImages, datasetSplit, JSZip, loadingCancelled, datasetConfig, availableSplits, yaml)}>
-                    {datasetType === "yolo" ? "⚠ " : ""}Download Segmentation
+                    {datasetType === "yolo" ? "⚠ " : "↓"} Seg
                   </button>
-                </>
+                </div>
               )}
             </div>
           </header>
@@ -691,257 +711,271 @@ const App = () => {
           <div className="flex flex-1 overflow-hidden">
 
             {/* ── Sidebar ── */}
-            <aside className="w-[340px] flex-shrink-0 bg-zinc-900/40 backdrop-blur-xl border-r border-white/5 p-5 overflow-y-auto custom-scrollbar">
-              <div className="animate-in">
-                {!dataset ? (
-                  <div {...getRootProps()} className={`group h-full flex flex-col items-center justify-center text-center space-y-6 py-12 border-2 border-dashed rounded-3xl transition-all cursor-pointer ${isDragActive ? "border-cyan-500 bg-cyan-500/10 shadow-[0_0_30px_rgba(6,182,212,0.1)]" : "border-white/5 bg-zinc-950/20 hover:border-white/20 hover:bg-zinc-900/40"}`}>
-                    <input {...getInputProps()} />
-                    <div className="w-16 h-16 rounded-3xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-3xl shadow-2xl shadow-cyan-500/10 group-hover:scale-110 transition-transform duration-500">📁</div>
-                    <div>
-                      <h2 className="text-lg font-bold text-white mb-2">Initialize Dataset</h2>
-                      <p className="text-xs text-zinc-500 leading-relaxed max-w-[240px] mx-auto">Drop a ZIP archive or click to browse your local files.</p>
-                    </div>
-                    <button className={`${btn} px-8 py-2.5 text-[10px] bg-cyan-500 border-transparent text-black font-black uppercase tracking-widest hover:bg-cyan-400 active:scale-95`} onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}>
-                      Upload Archive
-                    </button>
-                    <p className="text-[9px] text-zinc-700 font-bold uppercase tracking-[0.2em]">Supported: ZIP / JPG / PNG</p>
-                  </div>
-                ) : (
-                  <>
-                    {/* ── Dropzone ── */}
-                    <div className={formGroup}>
-                      <label className={labelCls}>Add Images</label>
-                      <div {...getRootProps()} className={`group border-2 border-dashed rounded-xl px-4 py-8 text-center cursor-pointer transition-all ${isDragActive ? "border-cyan-500 bg-cyan-500/5 text-cyan-400" : "border-white/10 text-zinc-500 hover:border-cyan-500/30 hover:bg-zinc-900/50"}`}>
-                        <input {...getInputProps()} />
-                        <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">➕</div>
-                        {isDragActive ? <p className="text-xs font-medium">Drag & drop or Click</p> : <p className="text-xs font-medium">Drag & drop or Click</p>}
+            <aside className="w-[300px] flex-shrink-0 bg-zinc-950/60 border-r border-yellow-400/8 flex flex-col overflow-hidden">
+              <div className="flex-1 overflow-y-auto p-4 space-y-0.5 custom-scrollbar">
+                <div className="animate-in">
+                  {!dataset ? (
+                    <div {...getRootProps()} className={`group h-full flex flex-col items-center justify-center text-center space-y-6 py-16 border-2 border-dashed rounded-2xl transition-all cursor-pointer ${isDragActive ? "border-yellow-400 bg-yellow-400/10 shadow-[0_0_30px_rgba(245,197,24,0.1)]" : "border-white/5 bg-zinc-950/20 hover:border-yellow-400/20 hover:bg-zinc-900/40"}`}>
+                      <input {...getInputProps()} />
+                      <div className="w-14 h-14 rounded-2xl bg-yellow-400/10 border border-yellow-400/15 flex items-center justify-center text-3xl shadow-xl group-hover:scale-110 transition-transform duration-500">📁</div>
+                      <div>
+                        <h2 className="text-base font-bold text-white mb-1.5">Initialize Dataset</h2>
+                        <p className="text-xs text-zinc-500 leading-relaxed max-w-[220px] mx-auto">Drop a ZIP archive or browse your local files.</p>
                       </div>
+                      <button className={`p-4 text-[10px] bg-yellow-400 border-transparent text-black font-black uppercase tracking-widest rounded-lg hover:bg-yellow-300 active:scale-95 transition-all`} onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}>
+                        Upload Archive
+                      </button>
+                      <p className="text-[9px] text-zinc-700 font-bold uppercase tracking-[0.2em]">ZIP · JPG · PNG</p>
                     </div>
-
-                    {/* ── Dataset split ── */}
-                    <div className={formGroup}>
-                      <label className={labelCls}>Dataset Split</label>
-                      <select className={selectCls} value={datasetSplit} onChange={(e) => {
-                        const newSplit = e.target.value;
-                        if (isManualDataset || isZipDataset) {
-                          if (currentImage) {
-                            const upd = { ...modifiedImages };
-                            const imgSplit = currentImage.split || datasetSplit;
-                            const k = `${imgSplit}/${currentImage.name}`;
-                            if (!upd[imgSplit]) upd[imgSplit] = {};
-                            upd[imgSplit][k] = annotations;
-                            setModifiedImages(upd);
-                          }
-                          setDatasetSplit(newSplit);
-                          setBatchStartIndex(0);
-                          const newSplitImages = images.filter((img, idx) => {
-                            let sp = isManualDataset ? (idx < Math.ceil(images.length * 0.8) ? "train" : "valid") : img.split;
-                            return sp === newSplit;
-                          });
-                          if (newSplitImages.length > 0) {
-                            const first = newSplitImages[0];
-                            const ai = images.findIndex((img) => img.id === first.id);
-                            setCurrentImageIndex(ai);
-                            const k = `${newSplit}/${first.name}`;
-                            setAnnotations(modifiedImages[newSplit]?.[k] || first.annotations || []);
-                            setScale(1); setStagePos({ x: 0, y: 0 });
-                          } else {
-                            setAnnotations([]); setCurrentImageIndex(-1); setScale(1); setStagePos({ x: 0, y: 0 });
-                          }
-                        } else {
-                          handleDatasetSplitChange(newSplit, datasetSplit, images, annotations, modifiedImages, setModifiedImages, setDatasetSplit, currentImageIndex, JSZip, dataset, datasetConfig, loadDatasetAllSplits, blobUrlsRef, setImages, setAnnotations, setCurrentImageIndex, setSelectedAnnotation, setNewAnnotation, setEditingAnnotation, setHoveredAnnotation, setSelectedAnnotations, checkMemory, setScale, setStagePos, showNotification);
-                        }
-                      }}>
-                        {availableSplits.filter((s) => !isManualDataset || s !== "test").map((s) => (
-                          <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
-                        ))}
-                      </select>
-                      <p className="text-[10px] text-zinc-600 mt-1">{displayImages.length} images in {datasetSplit}</p>
-                    </div>
-
-                    {/* ── Class selector ── */}
-                    <div className={formGroup}>
-                      <label className={labelCls}>Selected Class</label>
-                      <SearchableDropdown options={classes} value={selectedClass} onChange={(v) => setSelectedClass(v)} placeholder="Search class…" />
-                    </div>
-
-                    {/* ── Global Padding ── */}
-                    <div className={formGroup}>
-                      <label className={labelCls}>Global Padding — "{selectedClass}"</label>
-                      <div className="flex gap-2 mb-2">
-                        <div className="flex-1">
-                          <label className="block text-[10px] text-zinc-600 mb-1">Width</label>
-                          <input type="number" step="0.01" min="-1" max="1" className={inputCls}
-                            value={classPadding[classes.indexOf(selectedClass)]?.width || 0}
-                            onChange={(e) => { const id = classes.indexOf(selectedClass); setClassPadding((p) => ({ ...p, [id]: { ...(p[id] || { height: 0 }), width: parseFloat(e.target.value) || 0 } })); }} />
+                  ) : (
+                    <>
+                      {/* ── Current image badge ── */}
+                      {currentImage && (
+                        <div className="mb-3 px-3 py-2 bg-yellow-400/5 border border-yellow-400/15 rounded-xl flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 flex-shrink-0 animate-pulse" />
+                          <p className="text-[10px] text-yellow-300/80 font-mono truncate flex-1">{currentImage.name}</p>
+                          <span className="text-[9px] text-zinc-600 font-mono flex-shrink-0">{localIndex + 1}/{displayImages.length}</span>
                         </div>
-                        <div className="flex-1">
-                          <label className="block text-[10px] text-zinc-600 mb-1">Height</label>
-                          <input type="number" step="0.01" min="-1" max="1" className={inputCls}
-                            value={classPadding[classes.indexOf(selectedClass)]?.height || 0}
-                            onChange={(e) => { const id = classes.indexOf(selectedClass); setClassPadding((p) => ({ ...p, [id]: { ...(p[id] || { width: 0 }), height: parseFloat(e.target.value) || 0 } })); }} />
-                        </div>
-                      </div>
-                      <div className="flex gap-1.5">
-                        <button className={`${btn} flex-1 justify-center`} onClick={() => { const id = classes.indexOf(selectedClass); applyGlobalPadding(id, classPadding[id]?.width || 0, classPadding[id]?.height || 0, images, classPadding, setClassPadding, setImages, setAnnotations, currentImageIndex, modifiedImages, setModifiedImages, datasetSplit); }}>
-                          Apply to All
-                        </button>
-                        <button className={`${btnDanger} flex-1 justify-center`} onClick={() => resetClassPadding(classes.indexOf(selectedClass), setClassPadding)}>
-                          Reset
-                        </button>
-                      </div>
-                      <p className="text-[10px] text-zinc-600 mt-1.5">−1 to 1 · positive = larger, negative = smaller</p>
-                    </div>
-
-                    {/* ── Add class ── */}
-                    <AddClass setNewClassName={setSidebarClassName} addNewClass={() => { addNewClass(sidebarClassName); setSidebarClassName(""); }} newClassName={sidebarClassName} />
-
-                    {/* ── Batch nav ── */}
-                    {[
-                      { label: `Images (${images.length})`, total: images.length },
-                      { label: `Images (${displayImages.length})`, total: displayImages.length },
-                    ].map((row, ri) => (
-                      <div key={ri} className="py-2 border-t border-white/5">
-                        <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-600 mb-1.5">{row.label}</p>
-                        <div className="flex items-center justify-between gap-2">
-                          <button className={navBtn} onClick={goToPreviousBatch} disabled={batchStartIndex === 0}>◀ Prev</button>
-                          <span className="text-[10px] text-zinc-500 font-mono">{currentBatchIndex}/{totalBatches}</span>
-                          <button className={navBtn} onClick={goToNextBatch} disabled={batchStartIndex + batchSize >= row.total}>Next ▶</button>
-                        </div>
-                      </div>
-                    ))}
-
-                    {/* ── Class filter ── */}
-                    <div className="pt-2 border-t border-white/5">
-                      <label className="flex items-center gap-2 text-xs text-zinc-400 cursor-pointer">
-                        <input type="checkbox" checked={isClassWiseBatch} className="accent-cyan-500"
-                          onChange={(e) => { setIsClassWiseBatch(e.target.checked); setBatchStartIndex(0); if (e.target.checked) setClassWiseBatchClass(classes.indexOf(selectedClass)); }} />
-                        Filter by class
-                      </label>
-                      {isClassWiseBatch && (
-                        <>
-                          <div className="mt-2">
-                            <SearchableDropdown options={classes} value={classes[classWiseBatchClass ?? classes.indexOf(selectedClass)]} onChange={(v) => { setClassWiseBatchClass(classes.indexOf(v)); setBatchStartIndex(0); }} placeholder="Filter class…" />
-                          </div>
-                          <p className="text-[10px] text-zinc-600">{getImagesWithClass(classWiseBatchClass).length} images with "{classes[classWiseBatchClass]}"</p>
-                        </>
                       )}
-                    </div>
 
-                    {/* ── Thumbnail grid ── */}
-                    <div className="h-[420px] w-full mt-1">
-                      <VirtualImageGrid
-                        images={currentBatch}
-                        onImageClick={(index) => {
-                          const actualIndex = images.findIndex((img) => img.id === currentBatch[index].id);
-                          handleImageSelect(actualIndex, images, currentImageIndex, modifiedImages, datasetSplit, annotations, setAnnotations, setCurrentImageIndex, setModifiedImages, setSelectedAnnotation, setNewAnnotation, setEditingAnnotation, setHoveredAnnotation, setScale, setStagePos);
-                        }}
-                        selectedIndex={currentBatch.findIndex((img) => img.id === currentImage?.id)}
-                      />
-                    </div>
-
-                    {/* ── Annotation edit panel ── */}
-                    {selectedAnnotations.length > 0 && (
-                      <div className="mt-2 p-3 bg-zinc-900/40 backdrop-blur-xl border border-white/5 border-l-2 border-l-cyan-500 rounded-xl">
-                        {selectedAnnotation && selectedAnnotations.length === 1 ? (
-                          <>
-                            <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 mb-2">✏️ Edit Annotation</p>
-                            <div className={formGroup}>
-                              <label className={labelCls}>Class</label>
-                              <SearchableDropdown options={classes}
-                                value={classes[editingAnnotation?.classId ?? selectedAnnotation?.classId ?? 0]}
-                                onChange={(val) => {
-                                  const nid = classes.indexOf(val);
-                                  if (selectedAnnotation) {
-                                    handleAnnotationClassChange(selectedAnnotation.id || selectedAnnotation.unique_id, nid, annotations, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, selectedAnnotation, setEditingAnnotation, editingAnnotation, setSelectedAnnotation, setHoveredAnnotation, hoveredAnnotation, isZipDataset);
-                                    setEditingAnnotation({ ...editingAnnotation, classId: nid });
-                                  }
-                                }} placeholder="Search class…" />
-                            </div>
-                            {[
-                              { label: "Width", key: "width" },
-                              { label: "Height", key: "height" },
-                            ].map(({ label, key }) => (
-                              <div className={formGroup} key={key}>
-                                <label className={labelCls}>{label}</label>
-                                <input type="number" step="0.001" className={inputCls}
-                                  value={editingAnnotation?.[key] ?? selectedAnnotation?.[key] ?? 0}
-                                  onChange={(e) => {
-                                    const v = parseFloat(e.target.value);
-                                    if (selectedAnnotation) {
-                                      const w = key === "width" ? v : (editingAnnotation?.width ?? selectedAnnotation?.width ?? 0);
-                                      const h = key === "height" ? v : (editingAnnotation?.height ?? selectedAnnotation?.height ?? 0);
-                                      handleAnnotationSizeChange(selectedAnnotation.id, w, h, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, selectedAnnotation, setEditingAnnotation, editingAnnotation, setSelectedAnnotation, setHoveredAnnotation, hoveredAnnotation, annotations, isZipDataset);
-                                      setEditingAnnotation({ ...editingAnnotation, [key]: v });
-                                    }
-                                  }} />
-                              </div>
-                            ))}
-                            <label className="flex items-center gap-2 text-xs text-zinc-400 mb-3 cursor-pointer">
-                              <input type="checkbox" checked={editingAnnotation?.isWhitePatch || false} className="accent-cyan-500"
-                                onChange={(e) => {
-                                  const wp = e.target.checked;
-                                  const upd = annotations.map((a) => a.id === selectedAnnotation.id ? { ...a, isWhitePatch: wp } : a);
-                                  setAnnotations(upd);
-                                  setEditingAnnotation({ ...editingAnnotation, isWhitePatch: wp });
-                                  updateImageAnnotations(currentImageIndex, upd, images, modifiedImages, datasetSplit, setImages, setModifiedImages, isZipDataset);
-                                }} />
-                              Is White Patch
-                            </label>
-                            <button className={`${btnDanger} w-full justify-center`}
-                              onClick={() => handleAnnotationDelete(selectedAnnotation.id || selectedAnnotation.unique_id, annotations, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, selectedAnnotation, setSelectedAnnotation, setEditingAnnotation, hoveredAnnotation, setHoveredAnnotation, isZipDataset)}>
-                              Delete Annotation
-                            </button>
-                          </>
-                        ) : selectedAnnotations.length > 1 ? (
-                          <>
-                            <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 mb-2">✏️ Multiple Selected</p>
-                            <p className="text-xs text-zinc-400 mb-2">{selectedAnnotations.length} annotations selected</p>
-                            <button className={`${btnDanger} w-full justify-center`}
-                              onClick={() => handleMultipleAnnotationDelete(selectedAnnotations, annotations, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, setSelectedAnnotations, setSelectedAnnotation, setEditingAnnotation, isZipDataset)}>
-                              Delete All Selected
-                            </button>
-                          </>
-                        ) : null}
-                      </div>
-                    )}
-
-                    {/* ── Annotations list ── */}
-                    {annotations.length > 0 && (
-                      <div className="mt-2">
-                        <div className="flex items-center justify-between mb-2">
-                          <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">📝 Annotations ({annotations.length})</p>
-                          {selectedAnnotations.length > 1 && (
-                            <button className={btnDanger}
-                              onClick={() => handleMultipleAnnotationDelete(selectedAnnotations, annotations, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, setSelectedAnnotations, setSelectedAnnotation, setEditingAnnotation, isZipDataset)}>
-                              Delete {selectedAnnotations.length}
-                            </button>
-                          )}
+                      {/* ── Add Images ── */}
+                      <div className={formGroup}>
+                        <label className={labelCls}>Add Images</label>
+                        <div {...getRootProps()} className={`group border-2 border-dashed rounded-xl px-4 py-5 text-center cursor-pointer transition-all ${isDragActive ? "border-yellow-400 bg-yellow-400/5 text-yellow-300" : "border-white/8 text-zinc-600 hover:border-yellow-400/25 hover:bg-zinc-900/50 hover:text-zinc-400"}`}>
+                          <input {...getInputProps()} />
+                          <div className="text-xl mb-1 group-hover:scale-110 transition-transform">➕</div>
+                          <p className="text-[10px] font-medium">Drag & drop or Click</p>
                         </div>
-                        {annotations.map((ann) => (
-                          <div key={ann.id}
-                            className={`px-2.5 py-2 mb-1 rounded-lg border cursor-pointer transition-all ${selectedAnnotations.includes(ann.id) ? "bg-red-500/8 border-red-500/25" : "bg-zinc-900 border-white/6 hover:border-white/12 hover:bg-zinc-800"}`}
-                            onClick={(e) => handleAnnotationSelect(ann, e, selectedAnnotations, setSelectedAnnotations, setSelectedAnnotation, setEditingAnnotation, setHoveredAnnotation)}>
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-[11px] font-semibold font-mono text-zinc-200">#{ann.id}</span>
-                              <button className={btnDanger} onClick={(e) => { e.stopPropagation(); handleAnnotationDelete(ann.unique_id || ann.id, annotations, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, selectedAnnotation, setSelectedAnnotation, setEditingAnnotation, hoveredAnnotation, setHoveredAnnotation, isZipDataset); }}>
-                                ×
-                              </button>
+                      </div>
+
+                      {/* ── Dataset split ── */}
+                      <div className={formGroup}>
+                        <label className={labelCls}>Dataset Split</label>
+                        <div className="flex gap-1">
+                          {availableSplits.filter((s) => !isManualDataset || s !== "test").map((s) => (
+                            <button key={s}
+                              className={`flex-1 py-1.5 text-[10px] font-bold rounded-lg border transition-all capitalize ${datasetSplit === s ? "bg-yellow-400/15 border-yellow-400/35 text-yellow-300" : "bg-white/3 border-white/6 text-zinc-500 hover:text-zinc-300 hover:border-white/15"}`}
+                              onClick={() => {
+                                const newSplit = s;
+                                if (isManualDataset || isZipDataset) {
+                                  if (currentImage) {
+                                    const upd = { ...modifiedImages };
+                                    const imgSplit = currentImage.split || datasetSplit;
+                                    const k = `${imgSplit}/${currentImage.name}`;
+                                    if (!upd[imgSplit]) upd[imgSplit] = {};
+                                    upd[imgSplit][k] = annotations;
+                                    setModifiedImages(upd);
+                                  }
+                                  setDatasetSplit(newSplit);
+                                  setBatchStartIndex(0);
+                                  const newSplitImages = images.filter((img, idx) => {
+                                    let sp = isManualDataset ? (idx < Math.ceil(images.length * 0.8) ? "train" : "valid") : img.split;
+                                    return sp === newSplit;
+                                  });
+                                  if (newSplitImages.length > 0) {
+                                    const first = newSplitImages[0];
+                                    const ai = images.findIndex((img) => img.id === first.id);
+                                    setCurrentImageIndex(ai);
+                                    const k = `${newSplit}/${first.name}`;
+                                    setAnnotations(modifiedImages[newSplit]?.[k] || first.annotations || []);
+                                    setScale(1); setStagePos({ x: 0, y: 0 });
+                                  } else {
+                                    setAnnotations([]); setCurrentImageIndex(-1); setScale(1); setStagePos({ x: 0, y: 0 });
+                                  }
+                                } else {
+                                  handleDatasetSplitChange(newSplit, datasetSplit, images, annotations, modifiedImages, setModifiedImages, setDatasetSplit, currentImageIndex, JSZip, dataset, datasetConfig, loadDatasetAllSplits, blobUrlsRef, setImages, setAnnotations, setCurrentImageIndex, setSelectedAnnotation, setNewAnnotation, setEditingAnnotation, setHoveredAnnotation, setSelectedAnnotations, checkMemory, setScale, setStagePos, showNotification);
+                                }
+                              }}>
+                              {s}
+                            </button>
+                          ))}
+                        </div>
+                        <p className="text-[9px] text-zinc-600 mt-1 pl-0.5">{displayImages.length} images</p>
+                      </div>
+
+                      {/* ── Class selector ── */}
+                      <div className={formGroup}>
+                        <label className={labelCls}>Active Class</label>
+                        <SearchableDropdown options={classes} value={selectedClass} onChange={(v) => setSelectedClass(v)} placeholder="Search class…" />
+                      </div>
+
+                      {/* ── Global Padding ── */}
+                      <div className={formGroup}>
+                        <label className={labelCls}>Padding — "{selectedClass}"</label>
+                        <div className="flex gap-2 mb-2">
+                          <div className="flex-1">
+                            <label className="block text-[9px] text-zinc-600 mb-1">W</label>
+                            <input type="number" step="0.01" min="-1" max="1" className={inputCls}
+                              value={classPadding[classes.indexOf(selectedClass)]?.width || 0}
+                              onChange={(e) => { const id = classes.indexOf(selectedClass); setClassPadding((p) => ({ ...p, [id]: { ...(p[id] || { height: 0 }), width: parseFloat(e.target.value) || 0 } })); }} />
+                          </div>
+                          <div className="flex-1">
+                            <label className="block text-[9px] text-zinc-600 mb-1">H</label>
+                            <input type="number" step="0.01" min="-1" max="1" className={inputCls}
+                              value={classPadding[classes.indexOf(selectedClass)]?.height || 0}
+                              onChange={(e) => { const id = classes.indexOf(selectedClass); setClassPadding((p) => ({ ...p, [id]: { ...(p[id] || { width: 0 }), height: parseFloat(e.target.value) || 0 } })); }} />
+                          </div>
+                        </div>
+                        <div className="flex gap-1.5">
+                          <button className={`${btn} flex-1 justify-center`} onClick={() => { const id = classes.indexOf(selectedClass); applyGlobalPadding(id, classPadding[id]?.width || 0, classPadding[id]?.height || 0, images, classPadding, setClassPadding, setImages, setAnnotations, currentImageIndex, modifiedImages, setModifiedImages, datasetSplit); }}>
+                            Apply All
+                          </button>
+                          <button className={`${btnDanger} flex-1 justify-center`} onClick={() => resetClassPadding(classes.indexOf(selectedClass), setClassPadding)}>
+                            Reset
+                          </button>
+                        </div>
+                        <p className="text-[9px] text-zinc-700 mt-1.5 pl-0.5">−1 to +1 · positive = expand</p>
+                      </div>
+
+                      {/* ── Add class ── */}
+                      <AddClass setNewClassName={setSidebarClassName} addNewClass={() => { addNewClass(sidebarClassName); setSidebarClassName(""); }} newClassName={sidebarClassName} />
+
+                      {/* ── Batch nav ── */}
+                      <div className="py-2 border-t border-white/5">
+                        <div className="flex items-center justify-between gap-2">
+                          <button className={navBtn} onClick={goToPreviousBatch} disabled={batchStartIndex === 0}>‹</button>
+                          <span className="text-[10px] text-zinc-500 font-mono">{currentBatchIndex} / {totalBatches} batches</span>
+                          <button className={navBtn} onClick={goToNextBatch} disabled={batchStartIndex + batchSize >= displayImages.length}>›</button>
+                        </div>
+                      </div>
+
+                      {/* ── Class filter ── */}
+                      <div className="pb-2 border-b border-white/5">
+                        <label className="flex items-center gap-2 text-[10px] text-zinc-400 cursor-pointer">
+                          <input type="checkbox" checked={isClassWiseBatch} className="accent-yellow-400"
+                            onChange={(e) => { setIsClassWiseBatch(e.target.checked); setBatchStartIndex(0); if (e.target.checked) setClassWiseBatchClass(classes.indexOf(selectedClass)); }} />
+                          Filter by class
+                        </label>
+                        {isClassWiseBatch && (
+                          <>
+                            <div className="mt-2">
+                              <SearchableDropdown options={classes} value={classes[classWiseBatchClass ?? classes.indexOf(selectedClass)]} onChange={(v) => { setClassWiseBatchClass(classes.indexOf(v)); setBatchStartIndex(0); }} placeholder="Filter class…" />
                             </div>
-                            <p className="text-[10px] text-zinc-500 font-mono">cls: {classes[ann.classId] || "?"}</p>
-                            <p className="text-[10px] text-zinc-600 font-mono">
-                              {ann.centerX !== undefined ? ann.centerX.toFixed(3) : "–"}, {ann.centerY !== undefined ? ann.centerY.toFixed(3) : "–"} &nbsp;|&nbsp;
-                              {ann.width !== undefined ? ann.width.toFixed(3) : "–"} × {ann.height !== undefined ? ann.height.toFixed(3) : "–"}
-                            </p>
-                            {ann.type === "polygon" && ann.points && (
-                              <p className="text-[10px] text-zinc-600 font-mono">{ann.points.length} nodes</p>
+                            <p className="text-[9px] text-zinc-600 mt-1">{getImagesWithClass(classWiseBatchClass).length} matches</p>
+                          </>
+                        )}
+                      </div>
+
+                      {/* ── Thumbnail grid ── */}
+                      <div className="h-[380px] w-full mt-2">
+                        <VirtualImageGrid
+                          images={currentBatch}
+                          onImageClick={(index) => {
+                            const actualIndex = images.findIndex((img) => img.id === currentBatch[index].id);
+                            handleImageSelect(actualIndex, images, currentImageIndex, modifiedImages, datasetSplit, annotations, setAnnotations, setCurrentImageIndex, setModifiedImages, setSelectedAnnotation, setNewAnnotation, setEditingAnnotation, setHoveredAnnotation, setScale, setStagePos);
+                          }}
+                          selectedIndex={currentBatch.findIndex((img) => img.id === currentImage?.id)}
+                        />
+                      </div>
+
+                      {/* ── Annotation edit panel ── */}
+                      {selectedAnnotations.length > 0 && (
+                        <div className="mt-3 p-3 bg-yellow-400/5 border border-yellow-400/20 border-l-2 border-l-yellow-400 rounded-xl">
+                          {selectedAnnotation && selectedAnnotations.length === 1 ? (
+                            <>
+                              <p className={labelCls}>✏ Edit Annotation</p>
+                              <div className={formGroup}>
+                                <label className={labelCls}>Class</label>
+                                <SearchableDropdown options={classes}
+                                  value={classes[editingAnnotation?.classId ?? selectedAnnotation?.classId ?? 0]}
+                                  onChange={(val) => {
+                                    const nid = classes.indexOf(val);
+                                    if (selectedAnnotation) {
+                                      handleAnnotationClassChange(selectedAnnotation.id || selectedAnnotation.unique_id, nid, annotations, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, selectedAnnotation, setEditingAnnotation, editingAnnotation, setSelectedAnnotation, setHoveredAnnotation, hoveredAnnotation, isZipDataset);
+                                      setEditingAnnotation({ ...editingAnnotation, classId: nid });
+                                    }
+                                  }} placeholder="Search class…" />
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 mb-3">
+                                {[
+                                  { label: "W", key: "width" },
+                                  { label: "H", key: "height" },
+                                ].map(({ label, key }) => (
+                                  <div key={key}>
+                                    <label className={labelCls}>{label}</label>
+                                    <input type="number" step="0.001" className={inputCls}
+                                      value={editingAnnotation?.[key] ?? selectedAnnotation?.[key] ?? 0}
+                                      onChange={(e) => {
+                                        const v = parseFloat(e.target.value);
+                                        if (selectedAnnotation) {
+                                          const w = key === "width" ? v : (editingAnnotation?.width ?? selectedAnnotation?.width ?? 0);
+                                          const h = key === "height" ? v : (editingAnnotation?.height ?? selectedAnnotation?.height ?? 0);
+                                          handleAnnotationSizeChange(selectedAnnotation.id, w, h, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, selectedAnnotation, setEditingAnnotation, editingAnnotation, setSelectedAnnotation, setHoveredAnnotation, hoveredAnnotation, annotations, isZipDataset);
+                                          setEditingAnnotation({ ...editingAnnotation, [key]: v });
+                                        }
+                                      }} />
+                                  </div>
+                                ))}
+                              </div>
+                              <label className="flex items-center gap-2 text-[10px] text-zinc-400 mb-3 cursor-pointer">
+                                <input type="checkbox" checked={editingAnnotation?.isWhitePatch || false} className="accent-yellow-400"
+                                  onChange={(e) => {
+                                    const wp = e.target.checked;
+                                    const upd = annotations.map((a) => a.id === selectedAnnotation.id ? { ...a, isWhitePatch: wp } : a);
+                                    setAnnotations(upd);
+                                    setEditingAnnotation({ ...editingAnnotation, isWhitePatch: wp });
+                                    updateImageAnnotations(currentImageIndex, upd, images, modifiedImages, datasetSplit, setImages, setModifiedImages, isZipDataset);
+                                  }} />
+                                Is White Patch
+                              </label>
+                              <button className={`${btnDanger} w-full justify-center`}
+                                onClick={() => handleAnnotationDelete(selectedAnnotation.id || selectedAnnotation.unique_id, annotations, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, selectedAnnotation, setSelectedAnnotation, setEditingAnnotation, hoveredAnnotation, setHoveredAnnotation, isZipDataset)}>
+                                🗑 Delete
+                              </button>
+                            </>
+                          ) : selectedAnnotations.length > 1 ? (
+                            <>
+                              <p className={labelCls}>✏ {selectedAnnotations.length} Selected</p>
+                              <button className={`${btnDanger} w-full justify-center`}
+                                onClick={() => handleMultipleAnnotationDelete(selectedAnnotations, annotations, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, setSelectedAnnotations, setSelectedAnnotation, setEditingAnnotation, isZipDataset)}>
+                                🗑 Delete All Selected
+                              </button>
+                            </>
+                          ) : null}
+                        </div>
+                      )}
+
+                      {/* ── Annotations list ── */}
+                      {annotations.length > 0 && (
+                        <div className="mt-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <p className={labelCls}>Annotations ({annotations.length})</p>
+                            {selectedAnnotations.length > 1 && (
+                              <button className={btnDanger}
+                                onClick={() => handleMultipleAnnotationDelete(selectedAnnotations, annotations, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, setSelectedAnnotations, setSelectedAnnotation, setEditingAnnotation, isZipDataset)}>
+                                🗑 {selectedAnnotations.length}
+                              </button>
                             )}
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </>
-                )}
+                          <div className="space-y-1">
+                            {annotations.map((ann, i) => {
+                              const cls = classes[ann.classId] || "?";
+                              const hue = (ann.classId * 47 + 30) % 360;
+                              const isSel = selectedAnnotations.includes(ann.id);
+                              return (
+                                <div key={ann.id}
+                                  className={`px-2.5 py-2 rounded-lg border cursor-pointer transition-all flex items-center gap-2 ${isSel ? "bg-yellow-400/8 border-yellow-400/30" : "bg-zinc-900/60 border-white/5 hover:border-white/12 hover:bg-zinc-800/60"}`}
+                                  onClick={(e) => handleAnnotationSelect(ann, e, selectedAnnotations, setSelectedAnnotations, setSelectedAnnotation, setEditingAnnotation, setHoveredAnnotation)}>
+                                  <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: `hsl(${hue},70%,55%)` }} />
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-[10px] font-semibold text-zinc-300 truncate">{cls}</p>
+                                    <p className="text-[9px] text-zinc-600 font-mono">
+                                      {ann.centerX !== undefined ? ann.centerX.toFixed(3) : "–"}, {ann.centerY !== undefined ? ann.centerY.toFixed(3) : "–"}
+                                    </p>
+                                  </div>
+                                  <button className="w-5 h-5 flex items-center justify-center rounded text-zinc-600 hover:text-red-400 hover:bg-red-400/10 transition-all flex-shrink-0 text-xs"
+                                    onClick={(e) => { e.stopPropagation(); handleAnnotationDelete(ann.unique_id || ann.id, annotations, setAnnotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, selectedAnnotation, setSelectedAnnotation, setEditingAnnotation, hoveredAnnotation, setHoveredAnnotation, isZipDataset); }}>
+                                    ×
+                                  </button>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
             </aside>
 
@@ -949,261 +983,269 @@ const App = () => {
             <div className="flex-1 flex flex-col overflow-hidden relative">
 
               {/* Floating Tool Buttons */}
-              <div className="absolute top-5 left-5 z-50 flex flex-col gap-1 bg-zinc-900/80 backdrop-blur-2xl border border-white/5 rounded-2xl p-2 shadow-2xl">
+              <div className="absolute top-4 left-4 z-50 flex flex-col gap-0.5 bg-zinc-950/90 backdrop-blur-2xl border border-yellow-400/10 rounded-2xl p-1.5 shadow-2xl shadow-black/50">
+                <p className="text-[8px] font-black uppercase tracking-[0.2em] text-yellow-600/50 text-center py-0.5 mb-0.5">Tools</p>
                 {[
-                  { id: "select", label: "Select", icon: "🖱️", hint: "S" },
+                  { id: "select", label: "Select", icon: "↖", hint: "S" },
                   { id: "rectangle", label: "Box", icon: "⬚", hint: "Q" },
-                  { id: "polygon", label: "Polygon", icon: "⬡", hint: "P" },
-                  { id: "white-patch", label: "W-Patch", icon: "⏹️", hint: "W" },
+                  { id: "polygon", label: "Poly", icon: "⬡", hint: "P" },
+                  { id: "white-patch", label: "Patch", icon: "▪", hint: "W" },
                 ].map(({ id, label, icon, hint }) => (
                   <button key={id} title={`${label} (${hint})`}
                     onClick={() => setTool(id)}
                     className={`${toolBtnBase} ${tool === id
-                      ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)]"
-                      : "bg-transparent border-transparent text-zinc-500 hover:bg-white/5 hover:text-zinc-200"
+                      ? "bg-yellow-400/20 border-yellow-400/40 text-yellow-300 shadow-[0_0_12px_rgba(245,197,24,0.12)]"
+                      : "bg-transparent border-transparent text-zinc-600 hover:bg-white/5 hover:text-zinc-300"
                       }`}>
-                    <span className="text-base w-5">{icon}</span>
-                    <span className="flex-1 font-semibold">{label}</span>
-                    <span className="text-[9px] opacity-30 font-mono">{hint}</span>
+                    <span className="text-sm w-5 text-center leading-none">{icon}</span>
+                    <span className="flex-1">{label}</span>
+                    <kbd className="text-[8px] opacity-25 font-mono bg-white/5 rounded px-1">{hint}</kbd>
                   </button>
                 ))}
-                <div className="my-1.5 mx-1 h-px bg-white/10" />
+                <div className="my-1 mx-1 h-px bg-yellow-400/10" />
+                <p className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-600 text-center py-0.5">Views</p>
                 {[
-                  { id: "imageUploader", label: "Upload", icon: "📤" },
-                  { id: "cropper", label: "Cropper", icon: "✂️" },
-                  { id: "merge", label: "Merge", icon: "🔗" },
-                  { id: "CopyPasteAugmentation", label: "Copy-Paste", icon: "📋" },
+                  { id: "imageUploader", label: "Upload", icon: "↑" },
+                  { id: "cropper", label: "Crop", icon: "✂" },
+                  { id: "merge", label: "Merge", icon: "⊕" },
+                  // { id: "CopyPasteAugmentation", label: "C&P Aug", icon: "⎘" },
                 ].map(({ id, label, icon }) => (
                   <button key={id} onClick={() => setCurrentView(id)}
-                    className={`${toolBtnBase} bg-transparent border-transparent text-zinc-500 hover:bg-white/5 hover:text-zinc-200`}>
-                    <span className="text-base w-5">{icon}</span>
-                    <span className="flex-1 font-semibold">{label}</span>
+                    className={`${toolBtnBase} bg-transparent border-transparent text-zinc-600 hover:bg-white/5 hover:text-zinc-300`}>
+                    <span className="text-sm w-5 text-center leading-none">{icon}</span>
+                    <span className="flex-1">{label}</span>
                   </button>
                 ))}
               </div>
 
               {/* Canvas wrapper */}
-                <div className="flex-1 flex items-center justify-center overflow-auto bg-zinc-950 relative"
-                  style={{
-                    backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)",
-                    backgroundSize: "40px 40px",
-                  }}>
-                  
-                  {/* Image Loading / Error Overlays */}
-                  {isImageLoading && (
-                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm">
-                      <div className="w-12 h-12 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin mb-4" />
-                      <p className="text-xs font-bold text-cyan-400 uppercase tracking-widest animate-pulse">Loading Asset...</p>
-                    </div>
-                  )}
+              <div className="flex-1 flex items-center justify-center overflow-auto bg-zinc-950 relative"
+                style={{
+                  backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)",
+                  backgroundSize: "40px 40px",
+                }}>
 
-                  {imageLoadError && (
-                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-red-950/20 backdrop-blur-md p-8 text-center">
-                      <div className="text-4xl mb-4">⚠️</div>
-                      <h4 className="text-lg font-bold text-white mb-2">Image Loading Failed</h4>
-                      <p className="text-sm text-red-400 max-w-md">{imageLoadError}</p>
-                      <button className={`${btn} mt-6`} onClick={() => window.location.reload()}>🔄 Refresh Editor</button>
-                    </div>
-                  )}
+                {/* Image Loading / Error Overlays */}
+                {isImageLoading && (
+                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="w-10 h-10 border-3 border-yellow-400/20 border-t-yellow-400 rounded-full animate-spin mb-3" />
+                    <p className="text-[10px] font-black text-yellow-400/60 uppercase tracking-[0.2em]">Loading…</p>
+                  </div>
+                )}
 
-                  {currentImage ? (
-                    <Stage
-                      ref={stageRef}
-                      width={stageSize.width}
-                      height={stageSize.height}
-                      onMouseDown={(e) => {
-                        if (tool === "polygon") {
-                          const stage = e.target.getStage();
-                          const pointer = stage.getPointerPosition();
-                          const x = (pointer.x - stagePos.x) / scale;
-                          const y = (pointer.y - stagePos.y) / scale;
-                          const np = { x: x / stageSize.width, y: y / stageSize.height };
-                          if (newPolygonPoints.length > 0) {
-                            const last = newPolygonPoints[newPolygonPoints.length - 1];
-                            if (Math.sqrt(Math.pow(np.x - last.x, 2) + Math.pow(np.y - last.y, 2)) < 0.005) return;
-                          }
-                          setNewPolygonPoints((prev) => [...prev, np]);
-                          return;
+                {imageLoadError && (
+                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-red-950/20 backdrop-blur-md p-8 text-center">
+                    <div className="text-4xl mb-4">⚠️</div>
+                    <h4 className="text-lg font-bold text-white mb-2">Image Loading Failed</h4>
+                    <p className="text-sm text-red-400 max-w-md">{imageLoadError}</p>
+                    <button className={`${btn} mt-6`} onClick={() => window.location.reload()}>🔄 Refresh Editor</button>
+                  </div>
+                )}
+
+                {currentImage ? (
+                  <Stage
+                    ref={stageRef}
+                    width={stageSize.width}
+                    height={stageSize.height}
+                    onMouseDown={(e) => {
+                      if (tool === "polygon") {
+                        const stage = e.target.getStage();
+                        const pointer = stage.getPointerPosition();
+                        const x = (pointer.x - stagePos.x) / scale;
+                        const y = (pointer.y - stagePos.y) / scale;
+                        const np = { x: x / stageSize.width, y: y / stageSize.height };
+                        if (newPolygonPoints.length > 0) {
+                          const last = newPolygonPoints[newPolygonPoints.length - 1];
+                          if (Math.sqrt(Math.pow(np.x - last.x, 2) + Math.pow(np.y - last.y, 2)) < 0.005) return;
                         }
-                        handleMouseDown(e, currentImage, stagePos, scale, stageSize, selectedAnnotation, tool, normalizedToPixel, setNewAnnotation, setIsDragging, setIsResizing, setResizeHandle, setDragStartPos, setDragStartAnnotation, setIsDrawing);
-                        handleStageMouseDown(e, stagePos, scale, setDragStartPos);
-                      }}
-                      onDblClick={(e) => {
-                        if (tool === "polygon" && newPolygonPoints.length > 2) {
-                          const obj = { id: Date.now(), classId: classes.indexOf(selectedClass), points: newPolygonPoints, type: "polygon", isWhitePatch: tool === "white-patch" };
-                          const upd = [...annotations, obj];
-                          setAnnotations(upd); setSelectedAnnotation(obj); setEditingAnnotation({ ...obj });
-                          updateImageAnnotations(currentImageIndex, upd, images, modifiedImages, datasetSplit, setImages, setModifiedImages, isZipDataset);
-                          setNewPolygonPoints([]);
-                        }
-                      }}
-                      onMouseMove={(e) => {
-                        handleMouseMove(e, currentImage, stagePos, scale, stageSize, selectedAnnotation, normalizedToPixel, setNewAnnotation, setCrosshairPos, dragStartPos, dragStartAnnotation, resizeHandle, isResizing, isDragging, isDrawing, newAnnotation, setAnnotations, annotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, setSelectedAnnotation, setEditingAnnotation, editingAnnotation, isZipDataset, setStagePos);
-                        handleStageMouseMove(e, currentImage, stagePos, scale, setCrosshairPos);
-                      }}
-                      onMouseUp={(e) => handleMouseUp(currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, selectedAnnotation, isDragging, isResizing, dragStartAnnotation, newAnnotation, isDrawing, currentImage, setIsDragging, setIsResizing, setResizeHandle, setDragStartPos, setDragStartAnnotation, setNewAnnotation, setIsDrawing, isZipDataset, classes, currentImageIndex, imageRef, selectedClass, setAnnotations, annotations)}
-                      onWheel={(e) => handleZoom(e, stageRef, setScale, setStagePos)}
-                      scaleX={scale} scaleY={scale} x={stagePos.x} y={stagePos.y}
-                      style={{ 
-                        cursor: tool === "rectangle" ? "crosshair" : isDragging || isResizing ? "move" : "default",
-                        background: 'transparent',
-                      }}
-                      onMouseEnter={() => handleStageMouseEnter(setShowCrosshair)}
-                      onMouseLeave={() => handleStageMouseLeave(setShowCrosshair)}
-                    >
-                      <Layer>
-                        <KonvaImage ref={imageRef} image={preloadedImage} x={0} y={0} width={stageSize.width} height={stageSize.height} />
-                        {showCrosshair && tool === "rectangle" && (
-                          <>
-                            <Line points={[crosshairPos.x, 0, crosshairPos.x, stageSize.height]} stroke="#ffffff" strokeWidth={0.5} dash={[4, 4]} opacity={0.3} />
-                            <Line points={[0, crosshairPos.y, stageSize.width, crosshairPos.y]} stroke="#ffffff" strokeWidth={0.5} dash={[4, 4]} opacity={0.3} />
-                          </>
-                        )}
-                        {annotations.map((annotation) => {
-                          const pc = normalizedToPixel(annotation, stageSize.width, stageSize.height);
-                          const x = pc.x - pc.width / 2;
-                          const y = pc.y - pc.height / 2;
-                          const cc = getClassColor(annotation.classId);
-                          const isSel = (selectedAnnotation?.id === annotation.id) || selectedAnnotations.includes(annotation.id);
-                          const stroke = annotation.isWhitePatch ? "#ffffff" : isSel ? "#ff0000" : cc;
-                          const fill = annotation.isWhitePatch ? "#ffffff" : isSel ? "rgba(255,0,0,0.25)" : `rgba(${parseInt(cc.slice(1, 3), 16)},${parseInt(cc.slice(3, 5), 16)},${parseInt(cc.slice(5, 7), 16)},0.18)`;
-                          const sw = isSel ? 3 : 2;
-                          const evtProps = {
-                            onClick: (e) => handleAnnotationSelect(annotation, e.evt, selectedAnnotations, setSelectedAnnotations, setSelectedAnnotation, setEditingAnnotation, setHoveredAnnotation),
-                            onContextMenu: (e) => handleContextMenu(e, annotation, setContextMenu),
-                            onMouseEnter: () => setHoveredAnnotation(annotation),
-                            onMouseLeave: () => setHoveredAnnotation(null),
-                          };
-                          return (
-                            <React.Fragment key={annotation.id}>
-                              {annotation.type === "polygon" ? (
-                                <>
-                                  <Line points={annotation.points.flatMap((p) => [p.x * stageSize.width, p.y * stageSize.height])} stroke={stroke} strokeWidth={sw} fill={fill} closed={true} {...evtProps} />
-                                  {isSel && annotation.points.map((p, i) => (
-                                    <Circle
-                                      key={`pt-${i}`}
-                                      x={p.x * stageSize.width}
-                                      y={p.y * stageSize.height}
-                                      radius={5 / scale}
-                                      fill="#fff"
-                                      stroke={cc}
-                                      strokeWidth={1.5 / scale}
-                                      draggable
-                                      onDragMove={(e) => {
-                                        const nx = e.target.x() / stageSize.width;
-                                        const ny = e.target.y() / stageSize.height;
-                                        const newPoints = annotation.points.map((pt, pi) => pi === i ? { x: nx, y: ny } : pt);
-                                        const updated = { ...annotation, points: newPoints };
-                                        const newAnns = annotations.map((a) => a.id === annotation.id ? updated : a);
-                                        setAnnotations(newAnns);
-                                        setSelectedAnnotation(updated);
-                                      }}
-                                      onDragEnd={(e) => {
-                                        const nx = e.target.x() / stageSize.width;
-                                        const ny = e.target.y() / stageSize.height;
-                                        const newPoints = annotation.points.map((pt, pi) => pi === i ? { x: nx, y: ny } : pt);
-                                        const updated = { ...annotation, points: newPoints };
-                                        const newAnns = annotations.map((a) => a.id === annotation.id ? updated : a);
-                                        updateImageAnnotations(currentImageIndex, newAnns, images, modifiedImages, datasetSplit, setImages, setModifiedImages, isZipDataset);
-                                      }}
-                                    />
-                                  ))}
-                                </>
-                              ) : (
-                                <Rect x={x} y={y} width={pc.width} height={pc.height} stroke={stroke} strokeWidth={sw} fill={fill} {...evtProps} />
-                              )}
-                              {selectedAnnotation?.id === annotation.id && annotation.type !== "polygon" && (
-                                <>
-                                  {[[x, y, "nw"], [x + pc.width, y, "ne"], [x, y + pc.height, "sw"], [x + pc.width, y + pc.height, "se"]].map(([hx, hy, handle], i) => (
-                                    <Circle
-                                      key={i}
-                                      x={hx}
-                                      y={hy}
-                                      radius={5 / scale}
-                                      fill="#fff"
-                                      stroke="#000"
-                                      strokeWidth={1 / scale}
-                                      draggable
-                                      onDragMove={(e) => {
-                                        const nx = e.target.x();
-                                        const ny = e.target.y();
-                                        let newX = x, newY = y, newW = pc.width, newH = pc.height;
-                                        if (handle === "nw") { newX = nx; newY = ny; newW = (x + pc.width) - nx; newH = (y + pc.height) - ny; }
-                                        else if (handle === "ne") { newY = ny; newW = nx - x; newH = (y + pc.height) - ny; }
-                                        else if (handle === "sw") { newX = nx; newW = (x + pc.width) - nx; newH = ny - y; }
-                                        else if (handle === "se") { newW = nx - x; newH = ny - y; }
-                                        if (newW < 5 || newH < 5) return;
-                                        const cx2 = (newX + newW / 2) / stageSize.width;
-                                        const cy2 = (newY + newH / 2) / stageSize.height;
-                                        const updated = { ...annotation, centerX: cx2, centerY: cy2, width: newW / stageSize.width, height: newH / stageSize.height };
-                                        setAnnotations(annotations.map((a) => a.id === annotation.id ? updated : a));
-                                        setSelectedAnnotation(updated);
-                                      }}
-                                      onDragEnd={() => {
-                                        updateImageAnnotations(currentImageIndex, annotations, images, modifiedImages, datasetSplit, setImages, setModifiedImages, isZipDataset);
-                                      }}
-                                    />
-                                  ))}
-                                </>
-                              )}
-                            </React.Fragment>
-                          );
-                        })}
-                        {hoveredAnnotation && (() => {
-                          const pc = normalizedToPixel(hoveredAnnotation, stageSize.width, stageSize.height);
-                          const label = classes[hoveredAnnotation.classId] || "?";
-                          const fontSize = Math.max(11, Math.min(16, pc.width / 8));
-                          const lx = pc.x - pc.width / 2;
-                          const ly = pc.y - pc.height / 2;
-                          // For polygons, compute center from points
-                          let cx = pc.x, cy = pc.y;
-                          if (hoveredAnnotation.type === "polygon" && hoveredAnnotation.points?.length) {
-                            cx = hoveredAnnotation.points.reduce((s, p) => s + p.x * stageSize.width, 0) / hoveredAnnotation.points.length;
-                            cy = hoveredAnnotation.points.reduce((s, p) => s + p.y * stageSize.height, 0) / hoveredAnnotation.points.length;
-                          }
-                          const cc = getClassColor(hoveredAnnotation.classId);
-                          const textW = label.length * fontSize * 0.6 + 16;
-                          return (
-                            <>
-                              <Rect x={cx - textW / 2} y={cy - fontSize - 4} width={textW} height={fontSize + 8} fill="rgba(0,0,0,0.65)" cornerRadius={4} />
-                              <Text x={cx - textW / 2 + 8} y={cy - fontSize} text={label} fill={cc} fontSize={fontSize} fontStyle="bold" shadowColor="black" shadowBlur={1} shadowOpacity={0.8} />
-                            </>
-                          );
-                        })()}
-                        {newAnnotation && (
-                          <Rect x={Math.min(newAnnotation.x, newAnnotation.x + newAnnotation.width)} y={Math.min(newAnnotation.y, newAnnotation.y + newAnnotation.height)} width={Math.abs(newAnnotation.width)} height={Math.abs(newAnnotation.height)} stroke={newAnnotation.isWhitePatch ? "#fff" : "#f00"} strokeWidth={2} dash={newAnnotation.isWhitePatch ? [] : [5, 5]} fill={newAnnotation.isWhitePatch ? "#fff" : "rgba(255,0,0,0.08)"} />
-                        )}
+                        setNewPolygonPoints((prev) => [...prev, np]);
+                        return;
+                      }
+                      handleMouseDown(e, currentImage, stagePos, scale, stageSize, selectedAnnotation, tool, normalizedToPixel, setNewAnnotation, setIsDragging, setIsResizing, setResizeHandle, setDragStartPos, setDragStartAnnotation, setIsDrawing);
+                      handleStageMouseDown(e, stagePos, scale, setDragStartPos);
+                    }}
+                    onDblClick={(e) => {
+                      if (tool === "polygon" && newPolygonPoints.length > 2) {
+                        const obj = { id: Date.now(), classId: classes.indexOf(selectedClass), points: newPolygonPoints, type: "polygon", isWhitePatch: tool === "white-patch" };
+                        const upd = [...annotations, obj];
+                        setAnnotations(upd); setSelectedAnnotation(obj); setEditingAnnotation({ ...obj });
+                        updateImageAnnotations(currentImageIndex, upd, images, modifiedImages, datasetSplit, setImages, setModifiedImages, isZipDataset);
+                        setNewPolygonPoints([]);
+                      }
+                    }}
+                    onMouseMove={(e) => {
+                      handleMouseMove(e, currentImage, stagePos, scale, stageSize, selectedAnnotation, normalizedToPixel, setNewAnnotation, setCrosshairPos, dragStartPos, dragStartAnnotation, resizeHandle, isResizing, isDragging, isDrawing, newAnnotation, setAnnotations, annotations, currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, setSelectedAnnotation, setEditingAnnotation, editingAnnotation, isZipDataset, setStagePos);
+                      handleStageMouseMove(e, currentImage, stagePos, scale, setCrosshairPos);
+                    }}
+                    onMouseUp={(e) => handleMouseUp(currentImageIndex, images, modifiedImages, datasetSplit, setImages, setModifiedImages, selectedAnnotation, isDragging, isResizing, dragStartAnnotation, newAnnotation, isDrawing, currentImage, setIsDragging, setIsResizing, setResizeHandle, setDragStartPos, setDragStartAnnotation, setNewAnnotation, setIsDrawing, isZipDataset, classes, currentImageIndex, imageRef, selectedClass, setAnnotations, annotations)}
+                    onWheel={(e) => handleZoom(e, stageRef, setScale, setStagePos)}
+                    scaleX={scale} scaleY={scale} x={stagePos.x} y={stagePos.y}
+                    style={{
+                      cursor: tool === "rectangle" ? "crosshair" : isDragging || isResizing ? "move" : "default",
+                      background: 'transparent',
+                    }}
+                    onMouseEnter={() => handleStageMouseEnter(setShowCrosshair)}
+                    onMouseLeave={() => handleStageMouseLeave(setShowCrosshair)}
+                  >
+                    <Layer>
+                      <KonvaImage ref={imageRef} image={preloadedImage} x={0} y={0} width={stageSize.width} height={stageSize.height} />
+                      {showCrosshair && tool === "rectangle" && (
                         <>
-                          <Line points={[...newPolygonPoints.flatMap((p) => [p.x * stageSize.width, p.y * stageSize.height]), crosshairPos.x, crosshairPos.y]} stroke={tool === "white-patch" ? "#fff" : "#f00"} strokeWidth={2} closed={newPolygonPoints.length > 2} />
-                          {newPolygonPoints.map((p, i) => <Rect key={`np-${i}`} x={p.x * stageSize.width - 4 / scale} y={p.y * stageSize.height - 4 / scale} width={8 / scale} height={8 / scale} fill="#fff" stroke="#f00" strokeWidth={1 / scale} />)}
+                          <Line points={[crosshairPos.x, 0, crosshairPos.x, stageSize.height]} stroke="#fff200" strokeWidth={0.5} dash={[4, 4]} opacity={0.3} />
+                          <Line points={[0, crosshairPos.y, stageSize.width, crosshairPos.y]} stroke="#fff200" strokeWidth={0.5} dash={[4, 4]} opacity={0.3} />
                         </>
-                      </Layer>
-                    </Stage>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center opacity-20 p-10">
-                      <div className="text-8xl mb-6">📁</div>
-                      <p className="text-xl font-bold tracking-widest uppercase">Select an image to start</p>
+                      )}
+                      {annotations.map((annotation) => {
+                        const pc = normalizedToPixel(annotation, stageSize.width, stageSize.height);
+                        const x = pc.x - pc.width / 2;
+                        const y = pc.y - pc.height / 2;
+                        const cc = getClassColor(annotation.classId);
+                        const isSel = (selectedAnnotation?.id === annotation.id) || selectedAnnotations.includes(annotation.id);
+                        const stroke = annotation.isWhitePatch ? "#fff200" : isSel ? "#ff0000" : cc;
+                        const fill = annotation.isWhitePatch ? "#fff200" : isSel ? "rgba(255,0,0,0.25)" : `rgba(${parseInt(cc.slice(1, 3), 16)},${parseInt(cc.slice(3, 5), 16)},${parseInt(cc.slice(5, 7), 16)},0.18)`;
+                        const sw = isSel ? 3 : 2;
+                        const evtProps = {
+                          onClick: (e) => handleAnnotationSelect(annotation, e.evt, selectedAnnotations, setSelectedAnnotations, setSelectedAnnotation, setEditingAnnotation, setHoveredAnnotation),
+                          onContextMenu: (e) => handleContextMenu(e, annotation, setContextMenu),
+                          onMouseEnter: () => setHoveredAnnotation(annotation),
+                          onMouseLeave: () => setHoveredAnnotation(null),
+                        };
+                        return (
+                          <React.Fragment key={annotation.id}>
+                            {annotation.type === "polygon" ? (
+                              <>
+                                <Line points={annotation.points.flatMap((p) => [p.x * stageSize.width, p.y * stageSize.height])} stroke={stroke} strokeWidth={sw} fill={fill} closed={true} {...evtProps} />
+                                {isSel && annotation.points.map((p, i) => (
+                                  <Circle
+                                    key={`pt-${i}`}
+                                    x={p.x * stageSize.width}
+                                    y={p.y * stageSize.height}
+                                    radius={5 / scale}
+                                    fill="#fff"
+                                    stroke={cc}
+                                    strokeWidth={1.5 / scale}
+                                    draggable
+                                    onDragMove={(e) => {
+                                      const nx = e.target.x() / stageSize.width;
+                                      const ny = e.target.y() / stageSize.height;
+                                      const newPoints = annotation.points.map((pt, pi) => pi === i ? { x: nx, y: ny } : pt);
+                                      const updated = { ...annotation, points: newPoints };
+                                      const newAnns = annotations.map((a) => a.id === annotation.id ? updated : a);
+                                      setAnnotations(newAnns);
+                                      setSelectedAnnotation(updated);
+                                    }}
+                                    onDragEnd={(e) => {
+                                      const nx = e.target.x() / stageSize.width;
+                                      const ny = e.target.y() / stageSize.height;
+                                      const newPoints = annotation.points.map((pt, pi) => pi === i ? { x: nx, y: ny } : pt);
+                                      const updated = { ...annotation, points: newPoints };
+                                      const newAnns = annotations.map((a) => a.id === annotation.id ? updated : a);
+                                      updateImageAnnotations(currentImageIndex, newAnns, images, modifiedImages, datasetSplit, setImages, setModifiedImages, isZipDataset);
+                                    }}
+                                  />
+                                ))}
+                              </>
+                            ) : (
+                              <Rect x={x} y={y} width={pc.width} height={pc.height} stroke={stroke} strokeWidth={sw} fill={fill} {...evtProps} />
+                            )}
+                            {selectedAnnotation?.id === annotation.id && annotation.type !== "polygon" && (
+                              <>
+                                {[[x, y, "nw"], [x + pc.width, y, "ne"], [x, y + pc.height, "sw"], [x + pc.width, y + pc.height, "se"]].map(([hx, hy, handle], i) => (
+                                  <Circle
+                                    key={i}
+                                    x={hx}
+                                    y={hy}
+                                    radius={5 / scale}
+                                    fill="#fff"
+                                    stroke="#000"
+                                    strokeWidth={1 / scale}
+                                    draggable
+                                    onDragMove={(e) => {
+                                      const nx = e.target.x();
+                                      const ny = e.target.y();
+                                      let newX = x, newY = y, newW = pc.width, newH = pc.height;
+                                      if (handle === "nw") { newX = nx; newY = ny; newW = (x + pc.width) - nx; newH = (y + pc.height) - ny; }
+                                      else if (handle === "ne") { newY = ny; newW = nx - x; newH = (y + pc.height) - ny; }
+                                      else if (handle === "sw") { newX = nx; newW = (x + pc.width) - nx; newH = ny - y; }
+                                      else if (handle === "se") { newW = nx - x; newH = ny - y; }
+                                      if (newW < 5 || newH < 5) return;
+                                      const cx2 = (newX + newW / 2) / stageSize.width;
+                                      const cy2 = (newY + newH / 2) / stageSize.height;
+                                      const updated = { ...annotation, centerX: cx2, centerY: cy2, width: newW / stageSize.width, height: newH / stageSize.height };
+                                      setAnnotations(annotations.map((a) => a.id === annotation.id ? updated : a));
+                                      setSelectedAnnotation(updated);
+                                    }}
+                                    onDragEnd={() => {
+                                      updateImageAnnotations(currentImageIndex, annotations, images, modifiedImages, datasetSplit, setImages, setModifiedImages, isZipDataset);
+                                    }}
+                                  />
+                                ))}
+                              </>
+                            )}
+                          </React.Fragment>
+                        );
+                      })}
+                      {hoveredAnnotation && (() => {
+                        const pc = normalizedToPixel(hoveredAnnotation, stageSize.width, stageSize.height);
+                        const label = classes[hoveredAnnotation.classId] || "?";
+                        const fontSize = Math.max(11, Math.min(16, pc.width / 8));
+                        const lx = pc.x - pc.width / 2;
+                        const ly = pc.y - pc.height / 2;
+                        // For polygons, compute center from points
+                        let cx = pc.x, cy = pc.y;
+                        if (hoveredAnnotation.type === "polygon" && hoveredAnnotation.points?.length) {
+                          cx = hoveredAnnotation.points.reduce((s, p) => s + p.x * stageSize.width, 0) / hoveredAnnotation.points.length;
+                          cy = hoveredAnnotation.points.reduce((s, p) => s + p.y * stageSize.height, 0) / hoveredAnnotation.points.length;
+                        }
+                        const cc = getClassColor(hoveredAnnotation.classId);
+                        const textW = label.length * fontSize * 0.6 + 16;
+                        return (
+                          <>
+                            <Rect x={cx - textW / 2} y={cy - fontSize - 4} width={textW} height={fontSize + 8} fill="rgba(0,0,0,0.65)" cornerRadius={4} />
+                            <Text x={cx - textW / 2 + 8} y={cy - fontSize} text={label} fill={cc} fontSize={fontSize} fontStyle="bold" shadowColor="black" shadowBlur={1} shadowOpacity={0.8} />
+                          </>
+                        );
+                      })()}
+                      {newAnnotation && (
+                        <Rect x={Math.min(newAnnotation.x, newAnnotation.x + newAnnotation.width)} y={Math.min(newAnnotation.y, newAnnotation.y + newAnnotation.height)} width={Math.abs(newAnnotation.width)} height={Math.abs(newAnnotation.height)} stroke={newAnnotation.isWhitePatch ? "#fff" : "#f00"} strokeWidth={2} dash={newAnnotation.isWhitePatch ? [] : [5, 5]} fill={newAnnotation.isWhitePatch ? "#fff" : "rgba(255,0,0,0.08)"} />
+                      )}
+                      <>
+                        <Line points={[...newPolygonPoints.flatMap((p) => [p.x * stageSize.width, p.y * stageSize.height]), crosshairPos.x, crosshairPos.y]} stroke={tool === "white-patch" ? "#fff" : "#f00"} strokeWidth={2} closed={newPolygonPoints.length > 2} />
+                        {newPolygonPoints.map((p, i) => <Rect key={`np-${i}`} x={p.x * stageSize.width - 4 / scale} y={p.y * stageSize.height - 4 / scale} width={8 / scale} height={8 / scale} fill="#fff" stroke="#f00" strokeWidth={1 / scale} />)}
+                      </>
+                    </Layer>
+                  </Stage>
+                ) : (
+                  <div className="flex flex-col items-center justify-center gap-4 opacity-25 select-none">
+                    <div className="text-6xl">🖼</div>
+                    <div className="text-center">
+                      <p className="text-sm font-bold tracking-widest uppercase text-zinc-400">No Image Selected</p>
+                      <p className="text-xs text-zinc-600 mt-1">Pick an image from the sidebar</p>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
+              </div>
 
               {/* ── Bottom navigation bar ── */}
-              <div className="flex items-center gap-2 justify-center px-4 py-2 bg-zinc-950 border-t border-white/10 flex-shrink-0">
+              <div className="flex items-center gap-2 px-4 py-2 bg-zinc-950/80 border-t border-yellow-400/8 flex-shrink-0">
                 <button className={navBtn} disabled={localIndex <= 0}
                   onClick={() => { const prev = displayImages[localIndex - 1]; handleImageSelect(images.findIndex((img) => img.id === prev.id), images, currentImageIndex, modifiedImages, datasetSplit, annotations, setAnnotations, setCurrentImageIndex, setModifiedImages, setSelectedAnnotation, setNewAnnotation, setEditingAnnotation, setHoveredAnnotation, setScale, setStagePos); }}>
-                  ◀ Previous
+                  ‹ Prev
                 </button>
-                <span className="text-xs font-mono text-zinc-400 min-w-[100px] text-center">
-                  {localIndex + 1} / {displayImages.length}
-                </span>
+
+                {/* Filename center */}
+                <div className="flex-1 flex flex-col items-center min-w-0">
+                  <p className="text-[10px] font-mono text-zinc-400 truncate max-w-[300px]">{currentImage?.name || "—"}</p>
+                  <p className="text-[9px] text-zinc-700 font-mono">{localIndex + 1} / {displayImages.length}</p>
+                </div>
+
                 <button className={navBtn} disabled={localIndex >= displayImages.length - 1}
                   onClick={() => { const next = displayImages[localIndex + 1]; handleImageSelect(images.findIndex((img) => img.id === next.id), images, currentImageIndex, modifiedImages, datasetSplit, annotations, setAnnotations, setCurrentImageIndex, setModifiedImages, setSelectedAnnotation, setNewAnnotation, setEditingAnnotation, setHoveredAnnotation, setScale, setStagePos); }}>
-                  Next ▶
+                  Next ›
                 </button>
-                <div className="w-px h-5 bg-white/8 mx-1" />
+                <div className="w-px h-4 bg-white/8 mx-0.5" />
                 <div className="flex items-center gap-1.5">
-                  <label className="text-[10px] text-zinc-600 whitespace-nowrap">Go to</label>
-                  <input type="number" value={newValue} onChange={(e) => setNewValue(e.target.value)} className="w-16 bg-black border border-white/10 focus:border-cyan-500 rounded px-2 py-1 text-xs font-mono text-zinc-300 outline-none" />
+                  <input type="number" value={newValue} onChange={(e) => setNewValue(e.target.value)} className="w-14 bg-black/40 border border-white/8 focus:border-yellow-400/40 rounded-lg px-2 py-1 text-[10px] font-mono text-zinc-400 outline-none text-center" placeholder="#" />
                   <button className={navBtn} disabled={newValue > displayImages.length}
                     onClick={() => { const img = displayImages[newValue - 1]; if (img) handleImageSelect(images.findIndex((i) => i.id === img.id), images, currentImageIndex, modifiedImages, datasetSplit, annotations, setAnnotations, setCurrentImageIndex, setModifiedImages, setSelectedAnnotation, setNewAnnotation, setEditingAnnotation, setHoveredAnnotation, setScale, setStagePos); }}>
                     Go
@@ -1214,9 +1256,18 @@ const App = () => {
           </div>
 
           {/* ── Status bar ── */}
-          <div className="flex items-center px-4 h-7 bg-zinc-950 border-t border-white/5 text-[10px] font-mono text-zinc-600 flex-shrink-0">
-            {tool === "rectangle" && <span className="text-cyan-600">● Drawing rectangles — click and drag on the image</span>}
-            {tool === "select" && selectedAnnotation && <span className="text-cyan-600">● Selected — drag to move, corner handles to resize</span>}
+          <div className="flex items-center justify-between px-4 h-6 bg-zinc-950 border-t border-yellow-400/8 text-[9px] font-mono flex-shrink-0">
+            <div className="flex items-center gap-3">
+              {tool === "rectangle" && <span className="text-yellow-500/70 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-yellow-400 inline-block" /> Box mode — drag to draw</span>}
+              {tool === "polygon" && <span className="text-yellow-500/70 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-yellow-400 inline-block" /> Polygon — click points, dbl-click to close</span>}
+              {tool === "select" && selectedAnnotation && <span className="text-yellow-500/70 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-yellow-400 inline-block" /> Selected — drag to move, handles to resize</span>}
+              {tool === "select" && !selectedAnnotation && <span className="text-zinc-700">Select tool active</span>}
+            </div>
+            <div className="flex items-center gap-3 text-zinc-700">
+              {annotations.length > 0 && <span>{annotations.length} annotation{annotations.length !== 1 ? "s" : ""}</span>}
+              {scale !== 1 && <span>zoom {Math.round(scale * 100)}%</span>}
+              {currentImage && <span className="text-zinc-800">{datasetSplit}</span>}
+            </div>
           </div>
 
           <ContextMenu x={contextMenu.x} y={contextMenu.y} visible={contextMenu.visible} onClose={closeContextMenu}

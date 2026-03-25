@@ -60,13 +60,13 @@ const ImageViewer = ({ imageSrc, onCancel, onStartCrop }) => {
           {/* Floating Controls Overlay */}
           <div className="absolute inset-x-0 bottom-6 flex justify-center pointer-events-none">
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-950/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl pointer-events-auto">
-              <button onClick={handleZoomOut} className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-xl transition-all text-zinc-500 hover:text-cyan-500" title="Zoom Out">
+              <button onClick={handleZoomOut} className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-xl transition-all text-zinc-500 hover:text-yellow-400" title="Zoom Out">
                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
               </button>
  
               <span className="px-3 text-[10px] font-bold font-mono text-zinc-400 min-w-[50px] text-center">{Math.round(scale * 100)}%</span>
  
-              <button onClick={handleZoomIn} className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-xl transition-all text-zinc-500 hover:text-cyan-500" title="Zoom In">
+              <button onClick={handleZoomIn} className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-xl transition-all text-zinc-500 hover:text-yellow-400" title="Zoom In">
                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
               </button>
  
@@ -89,7 +89,7 @@ const ImageViewer = ({ imageSrc, onCancel, onStartCrop }) => {
             onClick={onStartCrop}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-black text-xs rounded-2xl transition-all shadow-xl shadow-cyan-500/20 uppercase tracking-widest"
+            className="px-8 py-3 bg-yellow-400 hover:bg-yellow-300 text-black font-black text-xs rounded-2xl transition-all shadow-xl shadow-yellow-400/20 uppercase tracking-widest"
           >
             Enter Crop Mode
           </motion.button>

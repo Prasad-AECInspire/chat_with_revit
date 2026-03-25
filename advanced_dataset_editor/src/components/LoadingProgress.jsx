@@ -16,7 +16,7 @@ const LoadingProgress = ({ current = 0, total = 0, stage = "Loading...", memoryU
   return (
     <div className="fixed inset-0 z-[9998] bg-black/90 backdrop-blur-xl flex items-center justify-center p-6 animate-in fade-in duration-300">
       <div className="bg-zinc-950/80 border border-white/10 rounded-[32px] p-10 min-w-[420px] shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-500/5 blur-[80px] -mr-24 -mt-24 rounded-full transition-all group-hover:bg-cyan-500/10" />
+        <div className="absolute top-0 right-0 w-48 h-48 bg-yellow-400/5 blur-[80px] -mr-24 -mt-24 rounded-full transition-all group-hover:bg-yellow-400/10" />
 
         {/* Header */}
         <div className="flex items-center justify-between mb-8 relative z-10">
@@ -25,7 +25,7 @@ const LoadingProgress = ({ current = 0, total = 0, stage = "Loading...", memoryU
               System Pipeline
             </h2>
             <div className="flex items-center gap-3">
-               <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+               <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse shadow-[0_0_8px_rgba(245,197,24,0.8)]" />
                <h3 className="text-sm font-bold text-white tracking-tight">
                  {stage || "Synchronizing Resources..."}
                </h3>
@@ -47,13 +47,13 @@ const LoadingProgress = ({ current = 0, total = 0, stage = "Loading...", memoryU
             <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
               Processing <span className="text-zinc-400">{current}</span> / <span className="text-zinc-400">{total}</span>
             </span>
-            <span className="text-xs font-black text-cyan-500 font-mono tracking-tighter">
+            <span className="text-xs font-black text-yellow-400 font-mono tracking-tighter">
               {percentage.toFixed(1)}%
             </span>
           </div>
           <div className="w-full h-2 bg-black/50 border border-white/5 rounded-full overflow-hidden shadow-inner ring-1 ring-white/5">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-cyan-600 to-blue-500 transition-all duration-300 shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+              className="h-full rounded-full bg-gradient-to-r from-yellow-500 to-blue-500 transition-all duration-300 shadow-[0_0_15px_rgba(245,197,24,0.4)]"
               style={{ width: `${percentage}%` }}
             />
           </div>

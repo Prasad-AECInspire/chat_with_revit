@@ -16,8 +16,8 @@ const ImageCropper = ({ setCurrentView, onImagesExport }) => {
   const [isCropping, setIsCropping] = useState(false);
 
   // ── Shared Tailwind class helpers ──────────────────────────
-  const btn = "inline-flex items-center gap-1.5 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-400 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
-  const btnPrimary = "inline-flex items-center gap-1.5 px-4 py-2 bg-cyan-500 hover:bg-cyan-400 border border-transparent text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.2)] active:scale-95";
+  const btn = "inline-flex items-center gap-1.5 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-yellow-400/50 text-zinc-300 hover:text-yellow-300 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
+  const btnPrimary = "inline-flex items-center gap-1.5 px-4 py-2 bg-yellow-400 hover:bg-yellow-300 border border-transparent text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-[0_0_20px_rgba(245,197,24,0.2)] active:scale-95";
   const cardCls = "bg-zinc-950/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl transition-all";
 
   const handleImageUpload = (src) => {
@@ -130,14 +130,14 @@ const ImageCropper = ({ setCurrentView, onImagesExport }) => {
             <span className="text-lg">←</span> Back to Editor
           </button>
           <div className="flex items-center gap-3">
-             <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+             <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Image Lab Active</span>
           </div>
         </div>
 
         {/* Hero Section */}
         <header className="text-center space-y-2 relative py-8">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/10 blur-[120px] rounded-full -z-10" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-yellow-400/10 blur-[120px] rounded-full -z-10" />
           <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl">AEC Image Cropper</h1>
           <p className="text-zinc-500 font-medium max-w-md mx-auto">High-precision cropping and batch processing for architectural datasets.</p>
         </header>
@@ -146,7 +146,7 @@ const ImageCropper = ({ setCurrentView, onImagesExport }) => {
         <main className="relative z-10">
           {!imageSrc ? (
             <div className={cardCls}>
-               <div className="border-2 border-dashed border-white/5 rounded-2xl p-12 text-center hover:border-cyan-500/30 transition-colors group">
+               <div className="border-2 border-dashed border-white/5 rounded-2xl p-12 text-center hover:border-yellow-400/30 transition-colors group">
                  <ImageUpload onImageUpload={handleImageUpload} />
                </div>
             </div>

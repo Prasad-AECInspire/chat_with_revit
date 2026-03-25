@@ -12,9 +12,9 @@ const DestinationInput = ({ path, setPath, filename, setFilename }) => {
             value={path}
             onChange={(e) => setPath(e.target.value)}
             placeholder="e.g. C:\Datasets\ProjectX\Exports"
-            className="w-full bg-zinc-900/50 border border-white/5 hover:border-white/10 rounded-2xl px-5 py-4 pr-12 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all shadow-inner"
+            className="w-full bg-zinc-900/50 border border-white/5 hover:border-white/10 rounded-2xl px-5 py-4 pr-12 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all shadow-inner"
           />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600 group-hover:text-cyan-500 transition-colors">
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600 group-hover:text-yellow-400 transition-colors">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
             </svg>
@@ -34,9 +34,9 @@ const DestinationInput = ({ path, setPath, filename, setFilename }) => {
             value={filename}
             onChange={(e) => setFilename(e.target.value)}
             placeholder="img_export"
-            className="w-full bg-zinc-900/50 border border-white/5 hover:border-white/10 rounded-2xl px-5 py-4 pr-12 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all shadow-inner text-center font-mono"
+            className="w-full bg-zinc-900/50 border border-white/5 hover:border-white/10 rounded-2xl px-5 py-4 pr-12 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all shadow-inner text-center font-mono"
           />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600 group-hover:text-cyan-500 transition-colors">
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600 group-hover:text-yellow-400 transition-colors">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
             </svg>

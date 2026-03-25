@@ -260,8 +260,8 @@ const MergeDatasets = ({ onBackToEditor }) => {
   });
 
   // ── Shared Tailwind class helpers ──────────────────────────
-  const btn = "inline-flex items-center gap-1.5 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-400 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
-  const btnPrimary = "inline-flex items-center gap-1.5 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 border border-transparent text-black rounded-2xl text-xs font-black transition-all cursor-pointer shadow-[0_0_30px_rgba(6,182,212,0.2)] active:scale-95 uppercase tracking-widest";
+  const btn = "inline-flex items-center gap-1.5 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-yellow-400/50 text-zinc-300 hover:text-yellow-300 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg active:scale-95";
+  const btnPrimary = "inline-flex items-center gap-1.5 px-6 py-3 bg-yellow-400 hover:bg-yellow-300 border border-transparent text-black rounded-2xl text-xs font-black transition-all cursor-pointer shadow-[0_0_30px_rgba(245,197,24,0.2)] active:scale-95 uppercase tracking-widest";
   const cardCls = "bg-zinc-950/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl transition-all";
   const labelCls = "text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1 block mb-2";
 
@@ -271,7 +271,7 @@ const MergeDatasets = ({ onBackToEditor }) => {
       {/* ── Top Navigation ── */}
       <header className="h-20 flex-shrink-0 border-b border-white/10 bg-zinc-950/50 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-50">
         <div className="flex items-center gap-5">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-xl shadow-inner">🔄</div>
+          <div className="w-10 h-10 rounded-xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-xl shadow-inner">🔄</div>
           <div>
             <h1 className="text-lg font-black tracking-tighter text-white leading-none mb-1">Merge Datasets</h1>
             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">AEC Integration Suite</p>
@@ -296,11 +296,11 @@ const MergeDatasets = ({ onBackToEditor }) => {
                 <div className="space-y-2">
                   <label className={labelCls}>Staging Area</label>
                   <div {...getRootProps()} className={`relative group border-2 border-dashed rounded-3xl p-8 transition-all duration-500 cursor-pointer overflow-hidden ${
-                    isDragActive ? "border-cyan-500 bg-cyan-500/5 shadow-[0_0_40px_rgba(6,182,212,0.1)]" : "border-white/5 bg-black/40 hover:border-white/20"
+                    isDragActive ? "border-yellow-400 bg-yellow-400/5 shadow-[0_0_40px_rgba(245,197,24,0.1)]" : "border-white/5 bg-black/40 hover:border-white/20"
                   }`}>
                     <input {...getInputProps()} />
                     <div className="flex flex-col items-center gap-3 text-center">
-                       <div className="w-12 h-12 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-600 group-hover:text-cyan-500 group-hover:bg-cyan-500/10 transition-all">
+                       <div className="w-12 h-12 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-600 group-hover:text-yellow-400 group-hover:bg-yellow-400/10 transition-all">
                           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
                        </div>
                        <p className="text-[10px] font-bold text-zinc-500 group-hover:text-zinc-300 uppercase tracking-tight">
@@ -315,7 +315,7 @@ const MergeDatasets = ({ onBackToEditor }) => {
                   <div className="bg-zinc-900/50 border border-white/5 rounded-2xl overflow-hidden">
                      <div className="px-4 py-3 bg-white/5 border-b border-white/5 flex items-center justify-between">
                         <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Staged Packages</span>
-                        <span className="text-[10px] font-mono text-cyan-500">{datasetsToMerge.length} files</span>
+                        <span className="text-[10px] font-mono text-yellow-400">{datasetsToMerge.length} files</span>
                      </div>
                      <div className="max-h-[200px] overflow-y-auto custom-scrollbar divide-y divide-white/5">
                         {datasetsToMerge.map((dataset, index) => (
@@ -334,11 +334,11 @@ const MergeDatasets = ({ onBackToEditor }) => {
              {isMerging ? (
                <div className="space-y-3">
                  <div className="flex items-center justify-between px-1">
-                    <span className="text-[10px] font-bold text-cyan-500 uppercase tracking-[0.2em] animate-pulse">Processing...</span>
+                    <span className="text-[10px] font-bold text-yellow-400 uppercase tracking-[0.2em] animate-pulse">Processing...</span>
                     <span className="text-[10px] font-mono text-zinc-500">{mergeProgress}%</span>
                  </div>
                  <div className="h-2 w-full bg-zinc-900 rounded-full overflow-hidden border border-white/5 shadow-inner">
-                   <div className="h-full bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-all duration-300 ease-out" style={{ width: `${mergeProgress}%` }} />
+                   <div className="h-full bg-yellow-400 shadow-[0_0_15px_rgba(245,197,24,0.5)] transition-all duration-300 ease-out" style={{ width: `${mergeProgress}%` }} />
                  </div>
                </div>
              ) : (
@@ -360,14 +360,14 @@ const MergeDatasets = ({ onBackToEditor }) => {
            <div className="max-w-3xl mx-auto space-y-12">
              
              <header className="space-y-4">
-                <div className="w-16 h-1 bg-cyan-500 rounded-full" />
+                <div className="w-16 h-1 bg-yellow-400 rounded-full" />
                 <h2 className="text-3xl font-black text-white tracking-tight">How to Unified Dataset</h2>
                 <p className="text-zinc-500 text-sm leading-relaxed max-w-xl">Our integration engine ensures topological consistency and class alignment when combining different data sources.</p>
              </header>
 
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className={cardCls + " p-8 h-full"}>
-                   <h4 className="text-[10px] font-bold text-cyan-500 uppercase tracking-widest mb-6 px-1 border-l-2 border-cyan-500">The Workflow</h4>
+                   <h4 className="text-[10px] font-bold text-yellow-400 uppercase tracking-widest mb-6 px-1 border-l-2 border-yellow-400">The Workflow</h4>
                    <ol className="space-y-6">
                       {[
                         { title: "Stage ZIPs", desc: "Add valid YOLO archive files to the staging area." },
